@@ -2,7 +2,7 @@
 
 use Faker\Generator as Faker;
 
-$factory->define(App\pdv_status_adquisicion::class, function (Faker $faker) {
+$factory->define(App\PdvStatusAdquisicion::class, function (Faker $faker) {
     return [
         //
     ];

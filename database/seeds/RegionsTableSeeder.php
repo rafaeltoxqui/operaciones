@@ -11,6 +11,24 @@ class RegionsTableSeeder extends Seeder
      */
     public function run()
     {
-        //
+        //factory(App\Region::class)->create();
+
+        DB::table('regions')->insert([
+        	[
+        		'name' => 'centro'
+        	],
+        	[
+        		'name' => 'noroeste'
+        	],
+        	[
+        		'name' => 'norte'
+        	],
+        	[
+        		'name' => 'pacífico'
+        	],
+        	[
+        		'name' => 'sur'
+        	]
+        ]);
     }
 }

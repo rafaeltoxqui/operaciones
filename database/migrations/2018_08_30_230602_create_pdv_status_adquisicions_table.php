@@ -14,7 +14,7 @@ class CreatePdvStatusAdquisicionsTable extends Migration
     public function up()
     {
         Schema::create('pdv_status_adquisicions', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->string('status');
             $table->timestamps();
         });
