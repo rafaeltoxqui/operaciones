@@ -18,7 +18,8 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/pVentaGrid', 'PuntosVentaController@showGridView')->name('grid');
-Route::get('/pdvData', 'PuntosVentaController@pdvData')->name('datapdv');
+Route::get('/pVentaGrid', 'PuntoVentaController@showGridView')->name('grid');
+Route::get('/pdvData', 'PuntoVentaController@pdvData')->name('datapdv');
+Route::post('/updateStatusPDV', 'PuntoVentaController@updateStatusPDV')->name('updateStatus');
 
 Route::get('test', 'TestController@index');

@@ -47736,7 +47736,19 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", { attrs: { scope: "col" } }, [_vm._v("Region")]),
         _vm._v(" "),
-        _c("th", { attrs: { scope: "col" } }, [_vm._v("Sub Region")])
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Sub Region")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Plaza")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("PDV Sugerido Por")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("PDV")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Estatus")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Firma de Contrato")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Comentarios")])
       ])
     ])
   },
@@ -47843,24 +47855,103 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	data: function data() {
 		return {
-			pdvdata: ''
+			pdvData: [],
+			pdvModel: '',
+			modalTitle: '',
+			selected: ''
 		};
+	},
+	mounted: function mounted() {
+		this.getPdvList();
 	},
 
 	methods: {
 		getPdvList: function getPdvList() {
 			var _this = this;
 
-			axios.get('/test').then(function (data) {
-				console.log(data);
-				_this.pdvdata = data;
+			axios.get('/pdvData').then(function (data) {
+				_this.pdvData = data.data;
+			});
+		},
+
+
+		testMethod: function testMethod() {
+			console.log('asdfasd');
+		},
+		pdvmessage: function pdvmessage(row) {
+			console.log(row);
+		},
+		pdvModal: function pdvModal(row) {
+			var pdv = this.pdvData[row.id - 1];
+			//console.log(pdv);
+			this.pdvModel = pdv.id;
+			this.modalTitle = pdv.pdv;
+			$('#exampleModal').modal('show');
+		},
+		updateStatusPDV: function updateStatusPDV() {
+			axios.post('/updateStatusPDV', { id: this.pdvModel, estatus: this.selected }).then(function (response) {
+				alert(response);
 			});
 		}
 	}
+
 });
 
 /***/ }),
@@ -47871,19 +47962,191 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _vm._m(0),
+  return _c("div", { attrs: { id: "op-dashboard" } }, [
+    _c("table", { staticClass: "table table-hover" }, [
+      _vm._m(0),
+      _vm._v(" "),
+      _c(
+        "tbody",
+        _vm._l(_vm.pdvData, function(row, index) {
+          return _c(
+            "tr",
+            {
+              key: row.id,
+              attrs: { row: row },
+              on: {
+                click: function($event) {
+                  _vm.pdvModal(row)
+                }
+              }
+            },
+            _vm._l(row, function(item) {
+              return _c("td", [
+                _vm._v("\r\n\t\t\t\t\t" + _vm._s(item) + "\r\n\t\t\t\t")
+              ])
+            })
+          )
+        })
+      )
+    ]),
     _vm._v(" "),
     _c(
-      "button",
+      "div",
       {
-        on: {
-          click: function($event) {
-            _vm.getPdvList()
-          }
+        staticClass: "modal fade",
+        attrs: {
+          id: "exampleModal",
+          tabindex: "-1",
+          role: "dialog",
+          "aria-labelledby": "exampleModalLabel",
+          "aria-hidden": "true"
         }
       },
-      [_vm._v("Traer Cosas")]
+      [
+        _c(
+          "div",
+          { staticClass: "modal-dialog", attrs: { role: "document" } },
+          [
+            _c("div", { staticClass: "modal-content" }, [
+              _c("div", { staticClass: "modal-header" }, [
+                _c(
+                  "h5",
+                  {
+                    staticClass: "modal-title",
+                    attrs: { id: "exampleModalLabel" },
+                    model: {
+                      value: _vm.modalTitle,
+                      callback: function($$v) {
+                        _vm.modalTitle = $$v
+                      },
+                      expression: "modalTitle"
+                    }
+                  },
+                  [_vm._v(_vm._s(_vm.modalTitle))]
+                ),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "close",
+                    attrs: {
+                      type: "button",
+                      "data-dismiss": "modal",
+                      "aria-label": "Close"
+                    },
+                    on: {
+                      click: function($event) {
+                        _vm.getPdvList()
+                      }
+                    }
+                  },
+                  [
+                    _c("span", { attrs: { "aria-hidden": "true" } }, [
+                      _vm._v("×")
+                    ])
+                  ]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-body" }, [
+                _c(
+                  "p",
+                  {
+                    model: {
+                      value: _vm.pdvModel,
+                      callback: function($$v) {
+                        _vm.pdvModel = $$v
+                      },
+                      expression: "pdvModel"
+                    }
+                  },
+                  [
+                    _vm._v(
+                      _vm._s(_vm.pdvModel) + " - Estatus del Punto de Venta"
+                    )
+                  ]
+                ),
+                _vm._v(" "),
+                _c("form", [
+                  _c(
+                    "select",
+                    {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.selected,
+                          expression: "selected"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      on: {
+                        change: function($event) {
+                          var $$selectedVal = Array.prototype.filter
+                            .call($event.target.options, function(o) {
+                              return o.selected
+                            })
+                            .map(function(o) {
+                              var val = "_value" in o ? o._value : o.value
+                              return val
+                            })
+                          _vm.selected = $event.target.multiple
+                            ? $$selectedVal
+                            : $$selectedVal[0]
+                        }
+                      }
+                    },
+                    [
+                      _c("option", { attrs: { value: "1" } }, [
+                        _vm._v("Autorizada")
+                      ]),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "2" } }, [
+                        _vm._v("Traspazo")
+                      ])
+                    ]
+                  ),
+                  _vm._v("\r\n\t        \tComentario:\r\n\t        \t"),
+                  _c("textarea", {
+                    staticClass: "form-control",
+                    attrs: { rows: "10" }
+                  })
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-footer" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-secondary",
+                    attrs: { type: "button", "data-dismiss": "modal" },
+                    on: {
+                      click: function($event) {
+                        _vm.getPdvList()
+                      }
+                    }
+                  },
+                  [_vm._v("Close")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-primary",
+                    attrs: { type: "button" },
+                    on: {
+                      click: function($event) {
+                        _vm.updateStatusPDV()
+                      }
+                    }
+                  },
+                  [_vm._v("Save changes")]
+                )
+              ])
+            ])
+          ]
+        )
+      ]
     )
   ])
 }
@@ -47892,11 +48155,31 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("table", [
+    return _c("thead", [
       _c("tr", [
-        _c("td", [_vm._v("asdf")]),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("ID")]),
         _vm._v(" "),
-        _c("td", [_vm._v("asdf")])
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Estimado de Apertura")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("No. Q")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Mas Apertura")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Region")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Sub Region")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Plaza")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("PDV Sugerido Por")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("PDV")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Estatus")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Firma de Contrato")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Comentarios")])
       ])
     ])
   }

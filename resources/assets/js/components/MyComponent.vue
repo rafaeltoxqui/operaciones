@@ -9,12 +9,12 @@
 				<th scope="col">Mas Apertura</th>
 				<th scope="col">Region</th>
 				<th scope="col">Sub Region</th>
-				<!--<th scope="col">Plaza</th>
+				<th scope="col">Plaza</th>
 				<th scope="col">PDV Sugerido Por</th>
 				<th scope="col">PDV</th>
 				<th scope="col">Estatus</th>
 				<th scope="col">Firma de Contrato</th>
-				<th scope="col">Comentarios</th>-->
+				<th scope="col">Comentarios</th>
 			</tr>
 		</thead>
 		<tbody>

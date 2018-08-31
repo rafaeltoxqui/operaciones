@@ -2,7 +2,7 @@
 
 @section('content')
 	<div class="container-fluid">
-		<p class="TitleGrid"><h1>GRID DE PUNTOS DE VENTA</h1></p><br>
-		<table-modal></table-modal>
+		<p class="TitleGrid"><h1>PUNTOS DE VENTA</h1></p><br>
+		<pdv-table></pdv-table>
 	</div>
 @endsection
