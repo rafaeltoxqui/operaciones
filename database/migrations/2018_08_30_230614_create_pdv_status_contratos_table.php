@@ -14,7 +14,7 @@ class CreatePdvStatusContratosTable extends Migration
     public function up()
     {
         Schema::create('pdv_status_contratos', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->string('status');
             $table->timestamps();
         });
