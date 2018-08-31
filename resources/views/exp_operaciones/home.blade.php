@@ -15,6 +15,7 @@
                     @endif
 
                     You are logged in!
+                    <pdv-table></pdv-table>
                 </div>
             </div>
         </div>
