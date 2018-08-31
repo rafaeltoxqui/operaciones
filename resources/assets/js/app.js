@@ -16,7 +16,7 @@ window.Vue = require('vue');
  */
 
 Vue.component('example-component', require('./components/ExampleComponent.vue'));
-Vue.component('my-component', require('./components/MyComponent.vue'));
+Vue.component('table-modal', require('./components/MyComponent.vue'));
 Vue.component('pdv-table', require('./components/PdvTable.vue'));
 
 const app = new Vue({

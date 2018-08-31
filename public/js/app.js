@@ -14013,7 +14013,7 @@ window.Vue = __webpack_require__(37);
  */
 
 Vue.component('example-component', __webpack_require__(40));
-Vue.component('my-component', __webpack_require__(43));
+Vue.component('table-modal', __webpack_require__(43));
 Vue.component('pdv-table', __webpack_require__(46));
 
 var app = new Vue({
@@ -47562,7 +47562,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		pdvModal: function pdvModal(row) {
 			var pdv = this.pdvData[row.id];
 			console.log(pdv);
-			this.pdvModel = pdv.dato1;
+			this.pdvModel = pdv.id;
 			this.modalTitle = pdv.dato2; //Usar campo del nombre del PDV
 			$('#exampleModal').modal('show');
 		},
@@ -47762,7 +47762,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("form", [
-      _c("select", [
+      _c("select", { staticClass: "form-control" }, [
         _c("option", { attrs: { value: "1" } }, [_vm._v("Activo")]),
         _vm._v(" "),
         _c("option", { attrs: { value: "2" } }, [_vm._v("Activo")])

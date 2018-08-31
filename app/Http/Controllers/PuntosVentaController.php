@@ -11,9 +11,11 @@ class PuntosVentaController extends Controller
     }
 
     public function pdvData(){
-    	$responseList = array('id' => 1, 'dato1'=>'prueba','dato2'=>'prueba','dato3'=>'prueba','dato4'=>'prueba','dato5'=>'prueba');
-    	$responseList2= array('id' => 2, 'dato1'=>'prueba2','dato2'=>'prueba2','dato3'=>'prueba2','dato4'=>'prueba2','dato5'=>'prueba2');
-    	$responseList3= array('id' => 3, 'dato1'=>'prueba3','dato2'=>'prueba3','dato3'=>'prueba3','dato4'=>'prueba3','dato5'=>'prueba3');
+    	$responseList = array(
+            'id' => 1, 'dato1' => 'Junio', 'dato26' => 2, 'dato3' => 6, 'dato4' => 'Centro', 'dato5' => 'Mexico', 'dato6' => 'cd. Mexico', 'dato7' => 'Expert Cell', 'dato8' => 'Exp Multi Plaza Coacalco', 'dato9' => 'Autizada', 'dato10' => 'Formado', 'dato11' => 'Operando');
+
+    	$responseList2= array('id' => 2, 'dato1' => 'Julio','dato2'=>2,'dato3'=>6,'dato4'=>'Centro','dato5'=>'Mexico', 'dato6'=>'cd. Mexico', 'dato7'=>'Expert Cell', 'dato8'=> 'Exp Plaza Shopping', 'dato9'=>'Autizada', 'dato10'=>'Formado', 'dato11'=>'Operando');
+    	$responseList3= array('id' => 3, 'dato1'=>'Agosto','dato2'=>3,'dato3'=>11,'dato4'=>'Centro','dato5'=>'Mexico', 'dato6'=>'cd. Mexico', 'dato7'=>'Expert Cell', 'dato8'=> 'Ex Cuautepec', 'dato9'=>'Autizada', 'dato10'=>'Formado', 'dato11'=>'Operando');
     	$listados = array('1'=>$responseList, '2'=>$responseList2, '3'=>$responseList3);
     	return json_encode($listados);
     }

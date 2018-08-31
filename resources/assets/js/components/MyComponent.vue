@@ -49,7 +49,7 @@
 	      <div class="modal-body">
 	        <p v-model="pdvModel">{{pdvModel}}</p>
 	        <form>
-	        	<select>
+	        	<select class="form-control">
 	        		<option value="1">Activo</option>
 	        		<option value="2">Activo</option>
 	        	</select>
@@ -96,7 +96,7 @@
 			pdvModal(row){
 				var pdv = this.pdvData[row.id];
 				console.log(pdv);
-				this.pdvModel = pdv.dato1;
+				this.pdvModel = pdv.id;
 				this.modalTitle = pdv.dato2; //Usar campo del nombre del PDV
 				$('#exampleModal').modal('show');
 			},
