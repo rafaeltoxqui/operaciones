@@ -1,6 +1,6 @@
 <template>
 <div id="op-dashboard">
-		<table class="table table-hover">
+		<table class="table table-hover tabletextalign">
 		<thead>
 			<tr>
 				<th scope="col">ID</th>
@@ -23,8 +23,7 @@
 				<td v-for="(item,key)  in row">
 					
 					<span v-if="key==='pdv'">
-						<a class="anchor-pdv" href="#">{{item}}</a>
-
+						<a class="anchor-pdv" href="#" v-on:click="ir(row)">{{item}}</a>
 					</span>
 					<span v-else v-on:click="pdvModal(row)">{{item}}</span>
 					
@@ -80,7 +79,6 @@
 		mounted() {
 			this.getPdvList();
 			var element = document.querySelector('.anchor-pdv');
-			element.setAttribute( "href", "http://monoforms.com" );
 		},
 		methods : {
 			getPdvList() {
@@ -88,7 +86,11 @@
 					this.pdvData = data.data;
 				});
 			},
+			ir(row){
+				var url = "/pdv/"+row.id;
+				window.location.href = url;
 
+			},
 			testMethod: function () {
 				console.log('asdfasd');
 			},
@@ -97,15 +99,15 @@
 			},
 			pdvModal(row){
 				var pdv = this.pdvData[row.id - 1];
-				//console.log(pdv);
 				this.pdvModel = pdv.id;
 				this.modalTitle = pdv.pdv;
 				$('#exampleModal').modal('show');
 			},
 			updateStatusPDV(){
 				axios.post('/pdv',{id:this.pdvModel,estatus:this.selected}).then(function(response){
-					//alert(response);
 				});
+				this.getPdvList();
+				$('#exampleModal').modal('hide');
 			},
 
 		},

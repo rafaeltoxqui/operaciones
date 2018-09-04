@@ -1,8 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
-	<div class="container-fluid">
-		<p class="TitleGrid"><h1>PUNTOS DE VENTA</h1></p><br>
+	<div class="container">
+		<center><p class="TitleGrid"><h1>PUNTOS DE VENTA</h1></p><br></center>
 		<pdv-table></pdv-table>
 	</div>
 @endsection

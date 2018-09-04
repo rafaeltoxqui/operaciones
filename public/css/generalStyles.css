@@ -1,0 +1,21 @@
+
+
+/*estilos componente PdvTable*/
+.tabletextalign{
+	text-align: center;
+	align-content: center;
+
+}
+.anchor-pdv{
+	color: black;
+}
+.anchor-pdv:hover{
+	color:black;
+	text-decoration: underline;
+}
+
+
+/*estilos componente Pdv*/
+#textstyle{
+	font-weight: bold;
+}

@@ -25,6 +25,7 @@ Route::get('/pdv/{id}', 'PuntoVentaController@show')->name('pdv.show');
 Route::get('/pdv/getpdv/{id}', 'PuntoVentaController@getPdv')->name('pdv.getpdv');
 
 Route::post('/comment', 'CommentController@create')->name('comment.create');
+Route::get('/comment/getComents/{id}', 'CommentController@show')->name('comment.show');
 
 
 Route::get('test', 'TestController@index');
