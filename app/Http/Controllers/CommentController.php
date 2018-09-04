@@ -7,7 +7,7 @@ use App\PdvComment as Comment;
 
 class CommentController extends Controller
 {
-    public function saveNewComment(Request $request){
+    public function create(Request $request){
     	$newComment = new Comment();
     	$newComment->comment = $request->comentario;
     	$newComment->save();

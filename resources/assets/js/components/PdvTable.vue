@@ -4,26 +4,31 @@
 		<thead>
 			<tr>
 				<th scope="col">ID</th>
+				<th scope="col">PDV</th>
 				<th scope="col">Estimado de Apertura</th>
 				<th scope="col">No. Q</th>
 				<th scope="col">Mas Apertura</th>
 				<th scope="col">Region</th>
 				<th scope="col">Sub Region</th>
 				<th scope="col">Plaza</th>
-				<th scope="col">PDV Sugerido Por</th>
-				<th scope="col">PDV</th>
 				<th scope="col">Estatus</th>
 				<th scope="col">Firma de Contrato</th>
-				<th scope="col">Comentarios</th>
+				<th scope="col">PDV Sugerido Por</th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr v-for="(row, index) in pdvData" 
 				:key="row.id"
-				:row="row"
-				v-on:click="pdvModal(row)">
-				<td v-for="item  in row">
-					{{item}}
+				:row="row">
+				<td v-for="(item,key)  in row">
+					
+					<span v-if="key==='pdv'">
+						<a class="anchor-pdv" href="#">{{item}}</a>
+
+					</span>
+					<span v-else v-on:click="pdvModal(row)">{{item}}</span>
+					
+					
 				</td>
 			</tr>
 		</tbody>
@@ -41,13 +46,12 @@
 	      </div>
 	      <div class="modal-body">
 	        <p v-model="pdvModel">{{pdvModel}} - Estatus del Punto de Venta</p>
-	        <form>
+	    
 	        	<select class="form-control" v-model="selected">
 	        		<option value="1">Autorizada</option>
 	        		<option value="2">Traspazo</option>
 	        	</select>
-	        	Comentario:
-	        	<textarea class="form-control" rows="10"></textarea>
+	        	<comment :id="pdvModel"></comment>
 	        </form>
 	      </div>
 	      <div class="modal-footer">
@@ -75,10 +79,12 @@
 
 		mounted() {
 			this.getPdvList();
+			var element = document.querySelector('.anchor-pdv');
+			element.setAttribute( "href", "http://monoforms.com" );
 		},
 		methods : {
 			getPdvList() {
-				axios.get('/pdvData').then((data) => {
+				axios.get('/pdv/allpdv').then((data) => {
 					this.pdvData = data.data;
 				});
 			},
@@ -97,8 +103,8 @@
 				$('#exampleModal').modal('show');
 			},
 			updateStatusPDV(){
-				axios.post('/updateStatusPDV',{id:this.pdvModel,estatus:this.selected}).then(function(response){
-					alert(response);
+				axios.post('/pdv',{id:this.pdvModel,estatus:this.selected}).then(function(response){
+					//alert(response);
 				});
 			},
 

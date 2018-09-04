@@ -7,6 +7,7 @@
 /.vscode
 /.vagrant
 /app/Http/Controllers/TestController.php
+/app/Http/Controllers/TestController2.php
 Homestead.json
 Homestead.yaml
 npm-debug.log
