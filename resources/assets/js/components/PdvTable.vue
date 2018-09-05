@@ -11,8 +11,8 @@
 				<th scope="col">Region</th>
 				<th scope="col">Sub Region</th>
 				<th scope="col">Plaza</th>
-				<th scope="col">Estatus</th>
-				<th scope="col">Firma de Contrato</th>
+				<th scope="col">Estatus Adquisicion</th>
+				<th scope="col">Estatus Contrato</th>
 				<th scope="col">PDV Sugerido Por</th>
 			</tr>
 		</thead>

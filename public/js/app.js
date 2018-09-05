@@ -1902,10 +1902,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	data: function data() {
@@ -1934,6 +1930,190 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		$(function () {
 			$('[data-toggle="tooltip"]').tooltip();
 		}); //Inicializa tooltip
+	}
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/PdvModalUpdate.vue":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+	data: function data() {
+		return {
+			firstOpt: [],
+			Pdv: '',
+			Region: '',
+			Subregion: '',
+			Plaza: '',
+			Noq: 2,
+			estatuscontrato: '',
+			estatusadquisicion: '',
+			comentario: '',
+			regions: [],
+			subregions: [],
+			plazas: [],
+			estauscontratofirmado: [],
+			estadquisicion: []
+		};
+	},
+	mounted: function mounted() {
+		this.fillFields();
+		this.getPdv();
+	},
+
+	methods: {
+		getPdv: function getPdv() {
+			var _this = this;
+
+			var idPdv = $('#id').val();
+			axios.get('/pdv/getpdv/' + idPdv).then(function (response) {
+				_this.firstOpt = response.data[0];
+				_this.Pdv = _this.firstOpt.PDV;
+				_this.Noq = 2;
+				if (_this.firstOpt.Comment == "") {
+					_this.comentario = 'Actualizacion de los datos del PDV.';
+				} else {
+					_this.comentario = _this.firstOpt.Comment;
+				}
+			});
+		},
+		fillFields: function fillFields() {
+			var _this2 = this;
+
+			axios.get('/region/getregions').then(function (response) {
+				_this2.regions = response.data;
+			});
+			axios.get('/subregion/getsubregions').then(function (response) {
+				_this2.subregions = response.data;
+			});
+			axios.get('/plaza/getplazas').then(function (response) {
+				_this2.plazas = response.data;
+			});
+			axios.get('/statuscontrato/getstatuscontrato').then(function (response) {
+				_this2.estauscontratofirmado = response.data;
+			});
+			axios.get('/status/getStatus').then(function (response) {
+				_this2.estadquisicion = response.data;
+			});
+		},
+		sendPdvUpdate: function sendPdvUpdate() {
+			if (this.Pdv === '') {
+				this.Pdv = this.firstOpt.PDV;
+			}
+			if (this.Region === '') {
+				this.Region = this.firstOpt.Region;
+			}
+			if (this.Subregion === '') {
+				this.Subregion = this.firstOpt.Subregion;
+			}
+			if (this.Plaza === '') {
+				this.Plaza = this.firstOpt.Plaza;
+			}
+			if (this.estatuscontrato === '') {
+				this.estatuscontrato = this.firstOpt.FirmaContrato;
+			}
+			if (this.estatusadquisicion === '') {
+				this.estatusadquisicion = this.firstOpt.Estatus;
+			}
+			var idPdv = this.firstOpt.id;
+			var idTienda = this.firstOpt.idTienda;
+			axios.put('/pdv/update', {
+				id: idPdv, idTienda: this.Pdv, idRegion: this.Region, idSubregion: this.Subregion, idPlaza: this.Plaza,
+				idStatusAdquisicion: this.estatusadquisicion, idStatusContrato: this.estatuscontrato
+			}).then(function (response) {
+				//console.log(response.data);
+			}).catch(function (error) {
+				//console.log(error.response);
+			});
+			axios.put('/tienda/update', { id: idTienda, Name: this.Pdv }).then(function (response) {
+				console.log(response.data);
+			});
+
+			$('#exampleModalCenter').modal('hide');
+			this.$emit('updateYou');
+		}
 	}
 });
 
@@ -36871,9 +37051,9 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", { attrs: { scope: "col" } }, [_vm._v("Plaza")]),
         _vm._v(" "),
-        _c("th", { attrs: { scope: "col" } }, [_vm._v("Estatus")]),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Estatus Adquisicion")]),
         _vm._v(" "),
-        _c("th", { attrs: { scope: "col" } }, [_vm._v("Firma de Contrato")]),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Estatus Contrato")]),
         _vm._v(" "),
         _c("th", { attrs: { scope: "col" } }, [_vm._v("PDV Sugerido Por")])
       ])
@@ -37156,6 +37336,394 @@ if (false) {
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-4f52376b\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/PdvModalUpdate.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("div", { staticClass: "heigtModal" }, [
+      _c("div", { staticClass: "modal-body" }, [
+        _c("form", [
+          _c("div", { staticClass: "form-group" }, [
+            _c("label", [_vm._v("PDV: ")]),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.Pdv,
+                  expression: "Pdv"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: { name: "tienda" },
+              domProps: { value: _vm.Pdv },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.Pdv = $event.target.value
+                }
+              }
+            })
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "form-group" }, [
+            _c("label", [_vm._v("Region: ")]),
+            _vm._v(" "),
+            _c(
+              "select",
+              {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.Region,
+                    expression: "Region"
+                  }
+                ],
+                staticClass: "form-control",
+                on: {
+                  change: function($event) {
+                    var $$selectedVal = Array.prototype.filter
+                      .call($event.target.options, function(o) {
+                        return o.selected
+                      })
+                      .map(function(o) {
+                        var val = "_value" in o ? o._value : o.value
+                        return val
+                      })
+                    _vm.Region = $event.target.multiple
+                      ? $$selectedVal
+                      : $$selectedVal[0]
+                  }
+                }
+              },
+              [
+                _c("option", { attrs: { disabled: "", value: "" } }, [
+                  _vm._v(_vm._s(_vm.firstOpt.Region))
+                ]),
+                _vm._v(" "),
+                _vm._l(_vm.regions, function(region) {
+                  return _c("option", { domProps: { value: region.id } }, [
+                    _vm._v(
+                      "\r\n\t  \t\t\t\t" +
+                        _vm._s(region.name) +
+                        "\r\n\t  \t\t\t"
+                    )
+                  ])
+                })
+              ],
+              2
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "form-group" }, [
+            _c("label", [_vm._v("Subregion: ")]),
+            _vm._v(" "),
+            _c(
+              "select",
+              {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.Subregion,
+                    expression: "Subregion"
+                  }
+                ],
+                staticClass: "form-control",
+                on: {
+                  change: function($event) {
+                    var $$selectedVal = Array.prototype.filter
+                      .call($event.target.options, function(o) {
+                        return o.selected
+                      })
+                      .map(function(o) {
+                        var val = "_value" in o ? o._value : o.value
+                        return val
+                      })
+                    _vm.Subregion = $event.target.multiple
+                      ? $$selectedVal
+                      : $$selectedVal[0]
+                  }
+                }
+              },
+              [
+                _c("option", { attrs: { disabled: "", value: "" } }, [
+                  _vm._v(_vm._s(_vm.firstOpt.Subregion))
+                ]),
+                _vm._v(" "),
+                _vm._l(_vm.subregions, function(subregion) {
+                  return _c("option", { domProps: { value: subregion.id } }, [
+                    _vm._v(
+                      "\r\n\t  \t\t\t\t" +
+                        _vm._s(subregion.name) +
+                        "\r\n\t  \t\t\t"
+                    )
+                  ])
+                })
+              ],
+              2
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "form-group" }, [
+            _c("label", [_vm._v("Plaza: ")]),
+            _vm._v(" "),
+            _c(
+              "select",
+              {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.Plaza,
+                    expression: "Plaza"
+                  }
+                ],
+                staticClass: "form-control",
+                on: {
+                  change: function($event) {
+                    var $$selectedVal = Array.prototype.filter
+                      .call($event.target.options, function(o) {
+                        return o.selected
+                      })
+                      .map(function(o) {
+                        var val = "_value" in o ? o._value : o.value
+                        return val
+                      })
+                    _vm.Plaza = $event.target.multiple
+                      ? $$selectedVal
+                      : $$selectedVal[0]
+                  }
+                }
+              },
+              [
+                _c("option", { attrs: { disabled: "", value: "" } }, [
+                  _vm._v(_vm._s(_vm.firstOpt.Plaza))
+                ]),
+                _vm._v(" "),
+                _vm._l(_vm.plazas, function(plaza) {
+                  return _c("option", { domProps: { value: plaza.id } }, [
+                    _vm._v(
+                      "\r\n\t  \t\t\t\t" + _vm._s(plaza.name) + "\r\n\t  \t\t\t"
+                    )
+                  ])
+                })
+              ],
+              2
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "form-group" }, [
+            _c("label", [_vm._v("No. Q: ")]),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model.trim",
+                  value: _vm.Noq,
+                  expression: "Noq",
+                  modifiers: { trim: true }
+                }
+              ],
+              staticClass: "form-control",
+              attrs: { type: "text", name: "noq" },
+              domProps: { value: _vm.Noq },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.Noq = $event.target.value.trim()
+                },
+                blur: function($event) {
+                  _vm.$forceUpdate()
+                }
+              }
+            })
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "form-group" }, [
+            _c("label", [_vm._v("Estatus Contrato: ")]),
+            _vm._v(" "),
+            _c(
+              "select",
+              {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.estatuscontrato,
+                    expression: "estatuscontrato"
+                  }
+                ],
+                staticClass: "form-control",
+                on: {
+                  change: function($event) {
+                    var $$selectedVal = Array.prototype.filter
+                      .call($event.target.options, function(o) {
+                        return o.selected
+                      })
+                      .map(function(o) {
+                        var val = "_value" in o ? o._value : o.value
+                        return val
+                      })
+                    _vm.estatuscontrato = $event.target.multiple
+                      ? $$selectedVal
+                      : $$selectedVal[0]
+                  }
+                }
+              },
+              [
+                _c("option", { attrs: { disabled: "", value: "" } }, [
+                  _vm._v(_vm._s(_vm.firstOpt.FirmaContrato))
+                ]),
+                _vm._v(" "),
+                _vm._l(_vm.estauscontratofirmado, function(contrato) {
+                  return _c("option", { domProps: { value: contrato.id } }, [
+                    _vm._v(
+                      "\r\n\t  \t\t\t\t" +
+                        _vm._s(contrato.status) +
+                        "\r\n\t  \t\t\t"
+                    )
+                  ])
+                })
+              ],
+              2
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "form-group" }, [
+            _c("label", [_vm._v("Estatus Adquisicion: ")]),
+            _vm._v(" "),
+            _c(
+              "select",
+              {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.estatusadquisicion,
+                    expression: "estatusadquisicion"
+                  }
+                ],
+                staticClass: "form-control",
+                on: {
+                  change: function($event) {
+                    var $$selectedVal = Array.prototype.filter
+                      .call($event.target.options, function(o) {
+                        return o.selected
+                      })
+                      .map(function(o) {
+                        var val = "_value" in o ? o._value : o.value
+                        return val
+                      })
+                    _vm.estatusadquisicion = $event.target.multiple
+                      ? $$selectedVal
+                      : $$selectedVal[0]
+                  }
+                }
+              },
+              [
+                _c("option", { attrs: { disabled: "", value: "" } }, [
+                  _vm._v(_vm._s(_vm.firstOpt.Estatus))
+                ]),
+                _vm._v(" "),
+                _vm._l(_vm.estadquisicion, function(adquisicion) {
+                  return _c("option", { domProps: { value: adquisicion.id } }, [
+                    _vm._v(
+                      "\r\n\t  \t\t\t\t" +
+                        _vm._s(adquisicion.status) +
+                        "\r\n\t  \t\t\t"
+                    )
+                  ])
+                })
+              ],
+              2
+            )
+          ]),
+          _vm._v(" "),
+          _c("hr"),
+          _vm._v(" "),
+          _c("div", { staticClass: "form-group" }, [
+            _c("label", [_vm._v("Comentario: ")]),
+            _vm._v(" "),
+            _c("textarea", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model.trim",
+                  value: _vm.comentario,
+                  expression: "comentario",
+                  modifiers: { trim: true }
+                }
+              ],
+              staticClass: "form-control",
+              attrs: { id: "Textarea1", rows: "3" },
+              domProps: { value: _vm.comentario },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.comentario = $event.target.value.trim()
+                },
+                blur: function($event) {
+                  _vm.$forceUpdate()
+                }
+              }
+            })
+          ])
+        ])
+      ])
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "modal-footer" }, [
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-secondary",
+          attrs: { type: "button", "data-dismiss": "modal" }
+        },
+        [_vm._v("Close")]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-primary",
+          attrs: { type: "button" },
+          on: {
+            click: function($event) {
+              _vm.sendPdvUpdate()
+            }
+          }
+        },
+        [_vm._v("Save changes")]
+      )
+    ])
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-4f52376b", module.exports)
+  }
+}
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-4fb499f2\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/CommentsPdv.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -37356,7 +37924,7 @@ var render = function() {
                 { staticClass: "col-xs-4 col-sm-4 col-md-4 col-lg-4" },
                 [
                   _c("h5", [
-                    _vm._v(" Firma contrato: "),
+                    _vm._v(" Estatus contrato: "),
                     _c(
                       "span",
                       { staticClass: "small", attrs: { id: "textstyle" } },
@@ -37371,7 +37939,7 @@ var render = function() {
                 { staticClass: "col-xs-4 col-sm-4 col-md-4 col-lg-4" },
                 [
                   _c("h5", [
-                    _vm._v(" Estatus: "),
+                    _vm._v(" Estatus adquisicion: "),
                     _c(
                       "span",
                       { staticClass: "small", attrs: { id: "textstyle" } },
@@ -37393,15 +37961,7 @@ var render = function() {
       ])
     ]),
     _vm._v(" "),
-    _vm._m(0)
-  ])
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
+    _c(
       "div",
       {
         staticClass: "modal fade",
@@ -37421,60 +37981,53 @@ var staticRenderFns = [
             attrs: { role: "document" }
           },
           [
-            _c("div", { staticClass: "modal-content" }, [
-              _c("div", { staticClass: "modal-header" }, [
-                _c(
-                  "h5",
-                  {
-                    staticClass: "modal-title",
-                    attrs: { id: "exampleModalLongTitle" }
-                  },
-                  [_vm._v("Modal title")]
-                ),
+            _c(
+              "div",
+              { staticClass: "modal-content" },
+              [
+                _vm._m(0),
                 _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    staticClass: "close",
-                    attrs: {
-                      type: "button",
-                      "data-dismiss": "modal",
-                      "aria-label": "Close"
+                _c("pdv-update", {
+                  on: {
+                    updateYou: function($event) {
+                      _vm.getPdv()
                     }
-                  },
-                  [
-                    _c("span", { attrs: { "aria-hidden": "true" } }, [
-                      _vm._v("×")
-                    ])
-                  ]
-                )
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "modal-body" }, [
-                _vm._v("\r\n\t        ...\r\n\t      ")
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "modal-footer" }, [
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-secondary",
-                    attrs: { type: "button", "data-dismiss": "modal" }
-                  },
-                  [_vm._v("Close")]
-                ),
-                _vm._v(" "),
-                _c(
-                  "button",
-                  { staticClass: "btn btn-primary", attrs: { type: "button" } },
-                  [_vm._v("Save changes")]
-                )
-              ])
-            ])
+                  }
+                })
+              ],
+              1
+            )
           ]
         )
       ]
     )
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c(
+        "h5",
+        { staticClass: "modal-title", attrs: { id: "exampleModalLongTitle" } },
+        [_vm._v("EDITION MODE")]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
+        },
+        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      )
+    ])
   }
 ]
 render._withStripped = true
@@ -48538,6 +49091,7 @@ Vue.component('pdv-table', __webpack_require__("./resources/assets/js/components
 Vue.component('pdv', __webpack_require__("./resources/assets/js/components/Pdv.vue"));
 Vue.component('comment', __webpack_require__("./resources/assets/js/components/Commentstable.vue"));
 Vue.component('comment-get', __webpack_require__("./resources/assets/js/components/CommentsPdv.vue"));
+Vue.component('pdv-update', __webpack_require__("./resources/assets/js/components/PdvModalUpdate.vue"));
 
 var app = new Vue({
   el: '#app'
@@ -48836,6 +49390,54 @@ if (false) {(function () {
     hotAPI.createRecord("data-v-769336ca", Component.options)
   } else {
     hotAPI.reload("data-v-769336ca", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/PdvModalUpdate.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
+/* script */
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/PdvModalUpdate.vue")
+/* template */
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-4f52376b\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/PdvModalUpdate.vue")
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/PdvModalUpdate.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-4f52376b", Component.options)
+  } else {
+    hotAPI.reload("data-v-4f52376b", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true

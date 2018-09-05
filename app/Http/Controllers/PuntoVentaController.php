@@ -11,7 +11,7 @@ class PuntoVentaController extends Controller
     	return view('exp_operaciones/puntosVenta');
     }
 
-    public function getAllPdv(){
+    public function getAllPdvJ(){
         $puntosVenta = \DB::table('pdvs')
         ->select('pdvs.id as id', 'tiendas.name as PDV','regions.name as Region','subregions.name as Subregion','plazas.name as Plaza','pdv_status_adquisicions.status as Estatus','pdv_status_contratos.status as FirmaContrato')
         ->join('pdv_status_adquisicions', 'pdvs.id_pdv_status_adquisicion', '=', 'pdv_status_adquisicions.id')
@@ -39,9 +39,9 @@ class PuntoVentaController extends Controller
 
     }
 
-    public function getPdv(Request $request){
+    public function getPdvJ(Request $request){
         $puntoVenta = \DB::table('pdvs')
-        ->select('pdvs.id as id', 'tiendas.name as PDV','regions.name as Region','subregions.name as Subregion','plazas.name as Plaza','pdv_status_adquisicions.status as Estatus','pdv_status_contratos.status as FirmaContrato','pdvs.id_pdv_comment as Comment')
+        ->select('pdvs.id as id', 'tiendas.name as PDV','regions.name as Region','subregions.name as Subregion','plazas.name as Plaza','pdv_status_adquisicions.status as Estatus','pdv_status_contratos.status as FirmaContrato','pdvs.id_pdv_comment as Comment','pdvs.id_tienda as idTienda')
         ->join('pdv_status_adquisicions', 'pdvs.id_pdv_status_adquisicion', '=', 'pdv_status_adquisicions.id')
         ->join('pdv_status_contratos', 'pdvs.id_pdv_status_contrato', '=', 'pdv_status_contratos.id')
         ->join('plazas', 'pdvs.id_plaza', '=', 'plazas.id')
@@ -57,6 +57,15 @@ class PuntoVentaController extends Controller
         return view('exp_operaciones/PuntoVenta', array('id'=>$request->id));
     }
 
-
+    public function updateAll(Request $request){
+        $pdv = PDV::find($request->id);
+        $pdv->id_region = $request->idRegion;
+        $pdv->id_subregion = $request->idSubregion;
+        $pdv->id_plaza = $request->idPlaza;
+        $pdv->id_pdv_status_adquisicion = $request->idStatusAdquisicion;
+        $pdv->id_pdv_status_contrato = $request->idStatusContrato;
+        $pdv->save();
+        return json_encode(['EXITO']);
+    }
 
 }

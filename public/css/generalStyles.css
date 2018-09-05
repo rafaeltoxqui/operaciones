@@ -19,3 +19,15 @@
 #textstyle{
 	font-weight: bold;
 }
+
+
+
+/*estilos componente PdvModelUpdate*/
+.heigtModal{
+	height: 500px;
+	overflow: auto;
+	overflow-x:hidden;
+}
+.mensajeModal{
+	display: none;
+}

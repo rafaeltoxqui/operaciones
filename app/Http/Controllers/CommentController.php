@@ -15,7 +15,7 @@ class CommentController extends Controller
     	return TRUE;
     }
 
-    public function show(Request $request){
+    public function showJ(Request $request){
     	$idcomment = PDV::find($request->id);
     	$coments = Comment::where('id','=',$idcomment->id_pdv_comment)->get();
     	return $coments;

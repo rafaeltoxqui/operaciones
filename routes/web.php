@@ -20,14 +20,19 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/pdvs', 'PuntoVentaController@index')->name('pdvs');
 Route::post('/pdv', 'PuntoVentaController@update')->name('pdv.update');
-Route::get('/pdv/allpdv', 'PuntoVentaController@getAllPdv')->name('pdv.allpdv');
+Route::put('/pdv/update', 'PuntoVentaController@updateAll')->name('pdv.updateall');
+Route::get('/pdv/allpdv', 'PuntoVentaController@getAllPdvJ')->name('pdv.allpdv');
 Route::get('/pdv/{id}', 'PuntoVentaController@show')->name('pdv.show');
-Route::get('/pdv/getpdv/{id}', 'PuntoVentaController@getPdv')->name('pdv.getpdv');
-
+Route::get('/pdv/getpdv/{id}', 'PuntoVentaController@getPdvJ')->name('pdv.getpdv');
 Route::post('/comment', 'CommentController@create')->name('comment.create');
-Route::get('/comment/getComents/{id}', 'CommentController@show')->name('comment.show');
-
-
+Route::get('/comment/getComents/{id}', 'CommentController@showJ')->name('comment.show');
+Route::get('/status/getStatus', 'PdvStatusAdquisicionController@getAllStatusJ')->name('status.getstatus');
+Route::get('/statuscontrato/getstatuscontrato', 'PdvStatusContratoController@getAllStatusContratoJ')->name('statucontrato.getstatuscontrato');
+Route::get('/plaza/getplazas', 'PlazaController@getAllPlazasJ')->name('plaza.getplazas');
+Route::get('/region/getregions', 'RegionController@getAllRegionsJ')->name('region.getregions');
+Route::get('/subregion/getsubregions', 'SubregionController@getAllSubregionsJ')->name('subregion.getubregions');
+Route::get('/tienda/gettiendas', 'TiendaController@getAllStoresJ')->name('tienda.gettiendas');
+Route::put('/tienda/update', 'TiendaController@update')->name('tienda.update');
 Route::get('test', 'TestController@index');
 
 //Route::resource('/test2','TestController2');
