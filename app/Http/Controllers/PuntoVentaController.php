@@ -41,7 +41,7 @@ class PuntoVentaController extends Controller
 
     public function getPdvJ(Request $request){
         $puntoVenta = \DB::table('pdvs')
-        ->select('pdvs.id as id', 'tiendas.name as PDV','regions.name as Region','subregions.name as Subregion','plazas.name as Plaza','pdv_status_adquisicions.status as Estatus','pdv_status_contratos.status as FirmaContrato','pdvs.id_pdv_comment as Comment','pdvs.id_tienda as idTienda')
+        ->select('pdvs.id as id', 'tiendas.name as PDV','regions.name as Region','subregions.name as Subregion','plazas.name as Plaza','pdv_status_adquisicions.status as Estatus','pdv_status_contratos.status as FirmaContrato','.id_pdv_comment as Comment','pdvs.id_tienda as idTienda','pdvs.id_region as idRegion','pdvs.id_subregion as idSubregion', 'pdvs.id_plaza as idPlaza', 'pdvs.id_pdv_status_adquisicion as idEstatus', 'pdvs.id_pdv_status_contrato as idFirmaContrato')
         ->join('pdv_status_adquisicions', 'pdvs.id_pdv_status_adquisicion', '=', 'pdv_status_adquisicions.id')
         ->join('pdv_status_contratos', 'pdvs.id_pdv_status_contrato', '=', 'pdv_status_contratos.id')
         ->join('plazas', 'pdvs.id_plaza', '=', 'plazas.id')

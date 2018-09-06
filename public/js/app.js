@@ -1653,8 +1653,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		};
 	},
 
-	props: ['id'],
-	mounted: function mounted() {
+	props: {
+		id: {
+			type: String
+		}
+	},
+	created: function created() {
 		console.log(this.id);
 		this.getCommentList();
 	},
@@ -1692,13 +1696,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		};
 	},
 
-	props: ['idComment'],
 	methods: {
-		commentCreate: function commentCreate() {
-			axios.post('/comment', { comment: this.comment }).then(function (response) {
-				console.log('Comentario' + response);
-			});
-		}
+		/*commentCreate(){
+  	axios.post('/comment',{comment : this.comment}).then((response) =>{
+  		console.log('Comentario' + response);
+  	});
+  },*/
 	}
 });
 
@@ -1902,6 +1905,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	data: function data() {
@@ -1918,11 +1922,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			var id = $('#id').val();
 			axios.get('/pdv/getpdv/' + id).then(function (response) {
 				_this.pdv = response.data[0];
-				_this.commentid = _this.pdv['Comment'];
+				_this.commentid = String(_this.pdv['Comment']);
 			});
 		},
 		pdvModalUpdate: function pdvModalUpdate() {
 			$('#exampleModalCenter').modal('show');
+		},
+		returnToPdvs: function returnToPdvs() {
+			var url = "/pdvs";
+			window.location.href = url;
 		}
 	},
 	created: function created() {
@@ -1940,6 +1948,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2079,38 +2098,35 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			});
 		},
 		sendPdvUpdate: function sendPdvUpdate() {
-			if (this.Pdv === '') {
-				this.Pdv = this.firstOpt.PDV;
-			}
 			if (this.Region === '') {
-				this.Region = this.firstOpt.Region;
+				this.Region = this.firstOpt.idRegion;
 			}
 			if (this.Subregion === '') {
-				this.Subregion = this.firstOpt.Subregion;
+				this.Subregion = this.firstOpt.idSubregion;
 			}
 			if (this.Plaza === '') {
-				this.Plaza = this.firstOpt.Plaza;
+				this.Plaza = this.firstOpt.idPlaza;
 			}
 			if (this.estatuscontrato === '') {
-				this.estatuscontrato = this.firstOpt.FirmaContrato;
+				this.estatuscontrato = this.firstOpt.idFirmaContrato;
 			}
 			if (this.estatusadquisicion === '') {
-				this.estatusadquisicion = this.firstOpt.Estatus;
+				this.estatusadquisicion = this.firstOpt.idEstatus;
 			}
 			var idPdv = this.firstOpt.id;
-			var idTienda = this.firstOpt.idTienda;
+			var idTiendaPdv = this.firstOpt.idTienda;
 			axios.put('/pdv/update', {
-				id: idPdv, idTienda: this.Pdv, idRegion: this.Region, idSubregion: this.Subregion, idPlaza: this.Plaza,
+				id: idPdv, idTienda: idTiendaPdv, idRegion: this.Region, idSubregion: this.Subregion, idPlaza: this.Plaza,
 				idStatusAdquisicion: this.estatusadquisicion, idStatusContrato: this.estatuscontrato
 			}).then(function (response) {
 				//console.log(response.data);
 			}).catch(function (error) {
 				//console.log(error.response);
 			});
-			axios.put('/tienda/update', { id: idTienda, Name: this.Pdv }).then(function (response) {
-				console.log(response.data);
+			axios.put('/tienda/update', { id: idTiendaPdv, Name: this.Pdv }).then(function (response) {
+				//console.log(response.data);
 			});
-
+			this.getPdv();
 			$('#exampleModalCenter').modal('hide');
 			this.$emit('updateYou');
 		}
@@ -37347,340 +37363,362 @@ var render = function() {
     _c("div", { staticClass: "heigtModal" }, [
       _c("div", { staticClass: "modal-body" }, [
         _c("form", [
-          _c("div", { staticClass: "form-group" }, [
-            _c("label", [_vm._v("PDV: ")]),
-            _vm._v(" "),
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.Pdv,
-                  expression: "Pdv"
-                }
-              ],
-              staticClass: "form-control",
-              attrs: { name: "tienda" },
-              domProps: { value: _vm.Pdv },
-              on: {
-                input: function($event) {
-                  if ($event.target.composing) {
-                    return
-                  }
-                  _vm.Pdv = $event.target.value
-                }
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "form-group" }, [
-            _c("label", [_vm._v("Region: ")]),
-            _vm._v(" "),
-            _c(
-              "select",
-              {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.Region,
-                    expression: "Region"
-                  }
-                ],
-                staticClass: "form-control",
-                on: {
-                  change: function($event) {
-                    var $$selectedVal = Array.prototype.filter
-                      .call($event.target.options, function(o) {
-                        return o.selected
-                      })
-                      .map(function(o) {
-                        var val = "_value" in o ? o._value : o.value
-                        return val
-                      })
-                    _vm.Region = $event.target.multiple
-                      ? $$selectedVal
-                      : $$selectedVal[0]
-                  }
-                }
-              },
-              [
-                _c("option", { attrs: { disabled: "", value: "" } }, [
-                  _vm._v(_vm._s(_vm.firstOpt.Region))
-                ]),
+          _c("div", { staticClass: "row" }, [
+            _c("div", { staticClass: "col-xs-6 col-sm-6 col-md-6 col-lg-6" }, [
+              _c("div", { staticClass: "form-group" }, [
+                _c("label", [_vm._v("PDV: ")]),
                 _vm._v(" "),
-                _vm._l(_vm.regions, function(region) {
-                  return _c("option", { domProps: { value: region.id } }, [
-                    _vm._v(
-                      "\r\n\t  \t\t\t\t" +
-                        _vm._s(region.name) +
-                        "\r\n\t  \t\t\t"
-                    )
-                  ])
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.Pdv,
+                      expression: "Pdv"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: { name: "tienda" },
+                  domProps: { value: _vm.Pdv },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.Pdv = $event.target.value
+                    }
+                  }
                 })
-              ],
-              2
-            )
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "form-group" }, [
-            _c("label", [_vm._v("Subregion: ")]),
-            _vm._v(" "),
-            _c(
-              "select",
-              {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.Subregion,
-                    expression: "Subregion"
-                  }
-                ],
-                staticClass: "form-control",
-                on: {
-                  change: function($event) {
-                    var $$selectedVal = Array.prototype.filter
-                      .call($event.target.options, function(o) {
-                        return o.selected
-                      })
-                      .map(function(o) {
-                        var val = "_value" in o ? o._value : o.value
-                        return val
-                      })
-                    _vm.Subregion = $event.target.multiple
-                      ? $$selectedVal
-                      : $$selectedVal[0]
-                  }
-                }
-              },
-              [
-                _c("option", { attrs: { disabled: "", value: "" } }, [
-                  _vm._v(_vm._s(_vm.firstOpt.Subregion))
-                ]),
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-group" }, [
+                _c("label", [_vm._v("Region: ")]),
                 _vm._v(" "),
-                _vm._l(_vm.subregions, function(subregion) {
-                  return _c("option", { domProps: { value: subregion.id } }, [
-                    _vm._v(
-                      "\r\n\t  \t\t\t\t" +
-                        _vm._s(subregion.name) +
-                        "\r\n\t  \t\t\t"
-                    )
-                  ])
-                })
-              ],
-              2
-            )
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "form-group" }, [
-            _c("label", [_vm._v("Plaza: ")]),
-            _vm._v(" "),
-            _c(
-              "select",
-              {
-                directives: [
+                _c(
+                  "select",
                   {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.Plaza,
-                    expression: "Plaza"
-                  }
-                ],
-                staticClass: "form-control",
-                on: {
-                  change: function($event) {
-                    var $$selectedVal = Array.prototype.filter
-                      .call($event.target.options, function(o) {
-                        return o.selected
-                      })
-                      .map(function(o) {
-                        var val = "_value" in o ? o._value : o.value
-                        return val
-                      })
-                    _vm.Plaza = $event.target.multiple
-                      ? $$selectedVal
-                      : $$selectedVal[0]
-                  }
-                }
-              },
-              [
-                _c("option", { attrs: { disabled: "", value: "" } }, [
-                  _vm._v(_vm._s(_vm.firstOpt.Plaza))
-                ]),
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.Region,
+                        expression: "Region"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    on: {
+                      change: function($event) {
+                        var $$selectedVal = Array.prototype.filter
+                          .call($event.target.options, function(o) {
+                            return o.selected
+                          })
+                          .map(function(o) {
+                            var val = "_value" in o ? o._value : o.value
+                            return val
+                          })
+                        _vm.Region = $event.target.multiple
+                          ? $$selectedVal
+                          : $$selectedVal[0]
+                      }
+                    }
+                  },
+                  [
+                    _c("option", { attrs: { disabled: "", value: "" } }, [
+                      _vm._v(_vm._s(_vm.firstOpt.Region))
+                    ]),
+                    _vm._v(" "),
+                    _vm._l(_vm.regions, function(region) {
+                      return _c("option", { domProps: { value: region.id } }, [
+                        _vm._v(
+                          "\r\n\t  \t\t\t\t\t" +
+                            _vm._s(region.name) +
+                            "\r\n\t  \t\t\t\t"
+                        )
+                      ])
+                    })
+                  ],
+                  2
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-group" }, [
+                _c("label", [_vm._v("Subregion: ")]),
                 _vm._v(" "),
-                _vm._l(_vm.plazas, function(plaza) {
-                  return _c("option", { domProps: { value: plaza.id } }, [
-                    _vm._v(
-                      "\r\n\t  \t\t\t\t" + _vm._s(plaza.name) + "\r\n\t  \t\t\t"
-                    )
-                  ])
-                })
-              ],
-              2
-            )
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "form-group" }, [
-            _c("label", [_vm._v("No. Q: ")]),
-            _vm._v(" "),
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model.trim",
-                  value: _vm.Noq,
-                  expression: "Noq",
-                  modifiers: { trim: true }
-                }
-              ],
-              staticClass: "form-control",
-              attrs: { type: "text", name: "noq" },
-              domProps: { value: _vm.Noq },
-              on: {
-                input: function($event) {
-                  if ($event.target.composing) {
-                    return
-                  }
-                  _vm.Noq = $event.target.value.trim()
-                },
-                blur: function($event) {
-                  _vm.$forceUpdate()
-                }
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "form-group" }, [
-            _c("label", [_vm._v("Estatus Contrato: ")]),
-            _vm._v(" "),
-            _c(
-              "select",
-              {
-                directives: [
+                _c(
+                  "select",
                   {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.estatuscontrato,
-                    expression: "estatuscontrato"
-                  }
-                ],
-                staticClass: "form-control",
-                on: {
-                  change: function($event) {
-                    var $$selectedVal = Array.prototype.filter
-                      .call($event.target.options, function(o) {
-                        return o.selected
-                      })
-                      .map(function(o) {
-                        var val = "_value" in o ? o._value : o.value
-                        return val
-                      })
-                    _vm.estatuscontrato = $event.target.multiple
-                      ? $$selectedVal
-                      : $$selectedVal[0]
-                  }
-                }
-              },
-              [
-                _c("option", { attrs: { disabled: "", value: "" } }, [
-                  _vm._v(_vm._s(_vm.firstOpt.FirmaContrato))
-                ]),
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.Subregion,
+                        expression: "Subregion"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    on: {
+                      change: function($event) {
+                        var $$selectedVal = Array.prototype.filter
+                          .call($event.target.options, function(o) {
+                            return o.selected
+                          })
+                          .map(function(o) {
+                            var val = "_value" in o ? o._value : o.value
+                            return val
+                          })
+                        _vm.Subregion = $event.target.multiple
+                          ? $$selectedVal
+                          : $$selectedVal[0]
+                      }
+                    }
+                  },
+                  [
+                    _c("option", { attrs: { disabled: "", value: "" } }, [
+                      _vm._v(_vm._s(_vm.firstOpt.Subregion))
+                    ]),
+                    _vm._v(" "),
+                    _vm._l(_vm.subregions, function(subregion) {
+                      return _c(
+                        "option",
+                        { domProps: { value: subregion.id } },
+                        [
+                          _vm._v(
+                            "\r\n\t  \t\t\t\t\t" +
+                              _vm._s(subregion.name) +
+                              "\r\n\t  \t\t\t\t"
+                          )
+                        ]
+                      )
+                    })
+                  ],
+                  2
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-group" }, [
+                _c("label", [_vm._v("Plaza: ")]),
                 _vm._v(" "),
-                _vm._l(_vm.estauscontratofirmado, function(contrato) {
-                  return _c("option", { domProps: { value: contrato.id } }, [
-                    _vm._v(
-                      "\r\n\t  \t\t\t\t" +
-                        _vm._s(contrato.status) +
-                        "\r\n\t  \t\t\t"
-                    )
-                  ])
-                })
-              ],
-              2
-            )
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "form-group" }, [
-            _c("label", [_vm._v("Estatus Adquisicion: ")]),
-            _vm._v(" "),
-            _c(
-              "select",
-              {
-                directives: [
+                _c(
+                  "select",
                   {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.estatusadquisicion,
-                    expression: "estatusadquisicion"
-                  }
-                ],
-                staticClass: "form-control",
-                on: {
-                  change: function($event) {
-                    var $$selectedVal = Array.prototype.filter
-                      .call($event.target.options, function(o) {
-                        return o.selected
-                      })
-                      .map(function(o) {
-                        var val = "_value" in o ? o._value : o.value
-                        return val
-                      })
-                    _vm.estatusadquisicion = $event.target.multiple
-                      ? $$selectedVal
-                      : $$selectedVal[0]
-                  }
-                }
-              },
-              [
-                _c("option", { attrs: { disabled: "", value: "" } }, [
-                  _vm._v(_vm._s(_vm.firstOpt.Estatus))
-                ]),
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.Plaza,
+                        expression: "Plaza"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    on: {
+                      change: function($event) {
+                        var $$selectedVal = Array.prototype.filter
+                          .call($event.target.options, function(o) {
+                            return o.selected
+                          })
+                          .map(function(o) {
+                            var val = "_value" in o ? o._value : o.value
+                            return val
+                          })
+                        _vm.Plaza = $event.target.multiple
+                          ? $$selectedVal
+                          : $$selectedVal[0]
+                      }
+                    }
+                  },
+                  [
+                    _c("option", { attrs: { disabled: "", value: "" } }, [
+                      _vm._v(_vm._s(_vm.firstOpt.Plaza))
+                    ]),
+                    _vm._v(" "),
+                    _vm._l(_vm.plazas, function(plaza) {
+                      return _c("option", { domProps: { value: plaza.id } }, [
+                        _vm._v(
+                          "\r\n\t  \t\t\t\t\t" +
+                            _vm._s(plaza.name) +
+                            "\r\n\t  \t\t\t\t"
+                        )
+                      ])
+                    })
+                  ],
+                  2
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-group" }, [
+                _c("label", [_vm._v("No. Q: ")]),
                 _vm._v(" "),
-                _vm._l(_vm.estadquisicion, function(adquisicion) {
-                  return _c("option", { domProps: { value: adquisicion.id } }, [
-                    _vm._v(
-                      "\r\n\t  \t\t\t\t" +
-                        _vm._s(adquisicion.status) +
-                        "\r\n\t  \t\t\t"
-                    )
-                  ])
-                })
-              ],
-              2
-            )
-          ]),
-          _vm._v(" "),
-          _c("hr"),
-          _vm._v(" "),
-          _c("div", { staticClass: "form-group" }, [
-            _c("label", [_vm._v("Comentario: ")]),
-            _vm._v(" "),
-            _c("textarea", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model.trim",
-                  value: _vm.comentario,
-                  expression: "comentario",
-                  modifiers: { trim: true }
-                }
-              ],
-              staticClass: "form-control",
-              attrs: { id: "Textarea1", rows: "3" },
-              domProps: { value: _vm.comentario },
-              on: {
-                input: function($event) {
-                  if ($event.target.composing) {
-                    return
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model.trim",
+                      value: _vm.Noq,
+                      expression: "Noq",
+                      modifiers: { trim: true }
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: { type: "text", name: "noq" },
+                  domProps: { value: _vm.Noq },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.Noq = $event.target.value.trim()
+                    },
+                    blur: function($event) {
+                      _vm.$forceUpdate()
+                    }
                   }
-                  _vm.comentario = $event.target.value.trim()
-                },
-                blur: function($event) {
-                  _vm.$forceUpdate()
-                }
-              }
-            })
+                })
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-6 col-sm-6 col-md-6 col-lg-6" }, [
+              _c("div", { staticClass: "form-group" }, [
+                _c("label", [_vm._v("Estatus Contrato: ")]),
+                _vm._v(" "),
+                _c(
+                  "select",
+                  {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.estatuscontrato,
+                        expression: "estatuscontrato"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    on: {
+                      change: function($event) {
+                        var $$selectedVal = Array.prototype.filter
+                          .call($event.target.options, function(o) {
+                            return o.selected
+                          })
+                          .map(function(o) {
+                            var val = "_value" in o ? o._value : o.value
+                            return val
+                          })
+                        _vm.estatuscontrato = $event.target.multiple
+                          ? $$selectedVal
+                          : $$selectedVal[0]
+                      }
+                    }
+                  },
+                  [
+                    _c("option", { attrs: { disabled: "", value: "" } }, [
+                      _vm._v(_vm._s(_vm.firstOpt.FirmaContrato))
+                    ]),
+                    _vm._v(" "),
+                    _vm._l(_vm.estauscontratofirmado, function(contrato) {
+                      return _c(
+                        "option",
+                        { domProps: { value: contrato.id } },
+                        [
+                          _vm._v(
+                            "\r\n\t  \t\t\t\t\t" +
+                              _vm._s(contrato.status) +
+                              "\r\n\t  \t\t\t\t"
+                          )
+                        ]
+                      )
+                    })
+                  ],
+                  2
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-group" }, [
+                _c("label", [_vm._v("Estatus Adquisicion: ")]),
+                _vm._v(" "),
+                _c(
+                  "select",
+                  {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.estatusadquisicion,
+                        expression: "estatusadquisicion"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    on: {
+                      change: function($event) {
+                        var $$selectedVal = Array.prototype.filter
+                          .call($event.target.options, function(o) {
+                            return o.selected
+                          })
+                          .map(function(o) {
+                            var val = "_value" in o ? o._value : o.value
+                            return val
+                          })
+                        _vm.estatusadquisicion = $event.target.multiple
+                          ? $$selectedVal
+                          : $$selectedVal[0]
+                      }
+                    }
+                  },
+                  [
+                    _c("option", { attrs: { disabled: "", value: "" } }, [
+                      _vm._v(_vm._s(_vm.firstOpt.Estatus))
+                    ]),
+                    _vm._v(" "),
+                    _vm._l(_vm.estadquisicion, function(adquisicion) {
+                      return _c(
+                        "option",
+                        { domProps: { value: adquisicion.id } },
+                        [
+                          _vm._v(
+                            "\r\n\t  \t\t\t\t\t" +
+                              _vm._s(adquisicion.status) +
+                              "\r\n\t  \t\t\t\t"
+                          )
+                        ]
+                      )
+                    })
+                  ],
+                  2
+                )
+              ]),
+              _vm._v(" "),
+              _c("br"),
+              _vm._v(" "),
+              _c("hr"),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-group" }, [
+                _c("label", [_vm._v("Comentario: ")]),
+                _vm._v(" "),
+                _c("textarea", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model.trim",
+                      value: _vm.comentario,
+                      expression: "comentario",
+                      modifiers: { trim: true }
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: { id: "Textarea1", rows: "6" },
+                  domProps: { value: _vm.comentario },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.comentario = $event.target.value.trim()
+                    },
+                    blur: function($event) {
+                      _vm.$forceUpdate()
+                    }
+                  }
+                })
+              ])
+            ])
           ])
         ])
       ])
@@ -37808,6 +37846,23 @@ var render = function() {
   return _c("div", [
     _c("div", { staticClass: "row" }, [
       _c("div", { staticClass: "col-md-12 col-lg-12" }, [
+        _c("div", { staticClass: "returnToPdvs" }, [
+          _c("button", {
+            staticClass: "btn btn-default btnToPdvs",
+            attrs: {
+              type: "button",
+              "data-toggle": "tooltip",
+              "data-placement": "bottom",
+              title: "Regresar a la Lista de Pdvs"
+            },
+            on: {
+              click: function($event) {
+                _vm.returnToPdvs()
+              }
+            }
+          })
+        ]),
+        _vm._v(" "),
         _c(
           "div",
           { staticClass: "jumbotron" },
@@ -37815,7 +37870,7 @@ var render = function() {
             _c("div", { staticClass: "row" }, [
               _c(
                 "div",
-                { staticClass: "col-xs-11 col-ms-11 col-md-11 col-lg-11" },
+                { staticClass: "col-xs-10 col-sm-10 col-md-10 col-lg-10" },
                 [
                   _c("h1", { staticClass: "display-4" }, [
                     _vm._v(_vm._s(_vm.pdv.PDV))
@@ -37830,24 +37885,20 @@ var render = function() {
                   attrs: { id: "rightAlign" }
                 },
                 [
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-default",
-                      attrs: {
-                        type: "button",
-                        "data-toggle": "tooltip",
-                        "data-placement": "bottom",
-                        title: "Edit/Update"
-                      },
-                      on: {
-                        click: function($event) {
-                          _vm.pdvModalUpdate()
-                        }
-                      }
+                  _c("button", {
+                    staticClass: "btn btn-default imgbtn",
+                    attrs: {
+                      type: "button",
+                      "data-toggle": "tooltip",
+                      "data-placement": "bottom",
+                      title: "Edit/Update"
                     },
-                    [_c("span", { staticClass: "glyphicon glyphicon-pencil" })]
-                  )
+                    on: {
+                      click: function($event) {
+                        _vm.pdvModalUpdate()
+                      }
+                    }
+                  })
                 ]
               )
             ]),
@@ -37964,7 +38015,7 @@ var render = function() {
     _c(
       "div",
       {
-        staticClass: "modal fade",
+        staticClass: "modal fade bd-example-modal-lg",
         attrs: {
           id: "exampleModalCenter",
           tabindex: "-1",
@@ -37977,7 +38028,7 @@ var render = function() {
         _c(
           "div",
           {
-            staticClass: "modal-dialog modal-dialog-centered",
+            staticClass: "modal-dialog modal-dialog-centered modal-lg",
             attrs: { role: "document" }
           },
           [
@@ -38012,7 +38063,7 @@ var staticRenderFns = [
       _c(
         "h5",
         { staticClass: "modal-title", attrs: { id: "exampleModalLongTitle" } },
-        [_vm._v("EDITION MODE")]
+        [_vm._v("PDV EDITION MODE")]
       ),
       _vm._v(" "),
       _c(

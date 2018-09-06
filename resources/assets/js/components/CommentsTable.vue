@@ -11,13 +11,12 @@
 				comment: '',
 			};
 		},
-		props: ['idComment'],
 		methods : {
-			commentCreate(){
+			/*commentCreate(){
 				axios.post('/comment',{comment : this.comment}).then((response) =>{
 					console.log('Comentario' + response);
 				});
-			},
+			},*/
 		},
 	}
 </script>

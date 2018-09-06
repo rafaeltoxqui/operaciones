@@ -12,8 +12,12 @@
 				comentario : [],
 			};
 		},
-		props:['id'],
-		mounted(){
+		props:{
+			id: {
+				type: String,
+			},
+		},
+		created(){
 			console.log(this.id);
 			this.getCommentList();
 		},

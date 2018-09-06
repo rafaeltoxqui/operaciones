@@ -34,6 +34,7 @@ Route::get('/subregion/getsubregions', 'SubregionController@getAllSubregionsJ')-
 Route::get('/tienda/gettiendas', 'TiendaController@getAllStoresJ')->name('tienda.gettiendas');
 Route::put('/tienda/update', 'TiendaController@update')->name('tienda.update');
 Route::get('test', 'TestController@index');
+Route::get('/test/pages', 'TestController@getAllPdvPage')->name('test.pages');
 
 //Route::resource('/test2','TestController2');
 

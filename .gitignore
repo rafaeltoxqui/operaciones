@@ -6,6 +6,7 @@
 /.idea
 /.vscode
 /.vagrant
+/public/img
 /app/Http/Controllers/TestController.php
 /app/Http/Controllers/TestController2.php
 Homestead.json
