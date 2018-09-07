@@ -2258,6 +2258,176 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/PdvTablePaginator.vue":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+	data: function data() {
+		return {
+			pages: [], //paginado
+			lastPage: 1, //paginado
+			list: [], //paginado, listado
+			pdvModel: '', //listado
+			modalTitle: '', //listado
+			selected: '', //listado
+			llave: '', //para recargar el sitio
+			onlyOnePage: [] //para regarcar el sitio
+		};
+	},
+
+	methods: {
+		//Metodos para paginado
+		fillList: function fillList() {
+			var _this = this;
+
+			axios.get('/pdvs/pages').then(function (response) {
+				_this.list = response.data.data;
+				_this.lastPage = response.data.last_page;
+				_this.createPages();
+			});
+		},
+		createPages: function createPages() {
+			this.pages = [];
+			for (var i = 1; i <= this.lastPage; i++) {
+				if (i === 1) {
+					this.pages.push({ ubication: i, class: "pageFocus" });
+				} else {
+					this.pages.push({ ubication: i, class: "" });
+				}
+			}
+		},
+		clickpage: function clickpage(index, page) {
+			var _this2 = this;
+
+			this.pages.filter(function (elem) {
+				elem.class = "";
+			});
+			axios.get('pdvs/pages?page=' + page.ubication).then(function (response) {
+				_this2.pages[index].class = "pageFocus";
+				_this2.llave = index;
+				_this2.onlyOnePage = page;
+				_this2.list = response.data.data;
+			});
+		},
+
+		// Aqui comienzan metodos para listado 
+		ir: function ir(row) {
+			var url = "/pdv/" + row.id;
+			window.location.href = url;
+		},
+		pdvModal: function pdvModal(row) {
+			var pdv = [];
+			for (var i = 1; i <= this.list.length; i++) {
+				if (this.list[i - 1].id == row.id) {
+					pdv = this.list[i - 1];
+				}
+			}
+			this.pdvModel = pdv.id;
+			this.modalTitle = pdv.PDV;
+			//console.log(this.pdvModel);
+			$('#exampleModal').modal('show');
+		},
+		updateStatusPDV: function updateStatusPDV() {
+			axios.post('/pdv', { id: this.pdvModel, estatus: this.selected }).then(function (response) {});
+			//this.getPdvList();
+			this.onlyRefeshList();
+			$('#exampleModal').modal('hide');
+		},
+		onlyRefeshList: function onlyRefeshList() {
+			this.fillList();
+			this.clickpage(this.llave, this.onlyOnePage);
+		}
+	},
+	beforeMount: function beforeMount() {
+		//metodo uncial para llenar la lista 
+		this.fillList();
+	}
+});
+
+/***/ }),
+
 /***/ "./node_modules/bootstrap/dist/js/bootstrap.js":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -37308,6 +37478,336 @@ if (false) {
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-2a2eb5de\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/PdvTablePaginator.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { attrs: { id: "op-dashboard" } }, [
+    _c("table", { staticClass: "table table-hover tabletextalign" }, [
+      _vm._m(0),
+      _vm._v(" "),
+      _c(
+        "tbody",
+        _vm._l(_vm.list, function(row, index) {
+          return _c(
+            "tr",
+            { key: row.id, attrs: { row: row } },
+            [
+              _vm._l(row, function(item, key) {
+                return _c("td", [
+                  key === "PDV"
+                    ? _c("span", [
+                        _c(
+                          "a",
+                          {
+                            staticClass: "anchor-pdv",
+                            attrs: { href: "#" },
+                            on: {
+                              click: function($event) {
+                                _vm.ir(row)
+                              }
+                            }
+                          },
+                          [_vm._v(_vm._s(item))]
+                        )
+                      ])
+                    : _c(
+                        "span",
+                        {
+                          on: {
+                            click: function($event) {
+                              _vm.pdvModal(row)
+                            }
+                          }
+                        },
+                        [_vm._v(_vm._s(item))]
+                      )
+                ])
+              }),
+              _vm._v(" "),
+              _c(
+                "td",
+                {
+                  on: {
+                    click: function($event) {
+                      _vm.pdvModal(row)
+                    }
+                  }
+                },
+                [_vm._v("Expert Cell")]
+              ),
+              _vm._v(" "),
+              _c(
+                "td",
+                {
+                  on: {
+                    click: function($event) {
+                      _vm.pdvModal(row)
+                    }
+                  }
+                },
+                [_vm._v("2")]
+              ),
+              _vm._v(" "),
+              _c(
+                "td",
+                {
+                  on: {
+                    click: function($event) {
+                      _vm.pdvModal(row)
+                    }
+                  }
+                },
+                [_vm._v("3")]
+              ),
+              _vm._v(" "),
+              _c(
+                "td",
+                {
+                  on: {
+                    click: function($event) {
+                      _vm.pdvModal(row)
+                    }
+                  }
+                },
+                [_vm._v("Agosto")]
+              )
+            ],
+            2
+          )
+        })
+      )
+    ]),
+    _vm._v(" "),
+    _c(
+      "ul",
+      { staticClass: "pagination pagination-sm" },
+      _vm._l(_vm.pages, function(page, index) {
+        return _c("li", { staticClass: "page-item" }, [
+          _c(
+            "a",
+            {
+              staticClass: "page-link",
+              class: page.class,
+              attrs: { tabindex: "-1" },
+              on: {
+                click: function($event) {
+                  _vm.clickpage(index, page)
+                }
+              }
+            },
+            [_vm._v("\r\n\t\t\t\t" + _vm._s(page.ubication) + "\r\n\t\t\t")]
+          )
+        ])
+      })
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: {
+          id: "exampleModal",
+          tabindex: "-1",
+          role: "dialog",
+          "aria-labelledby": "exampleModalLabel",
+          "aria-hidden": "true"
+        }
+      },
+      [
+        _c(
+          "div",
+          { staticClass: "modal-dialog", attrs: { role: "document" } },
+          [
+            _c("div", { staticClass: "modal-content" }, [
+              _c("div", { staticClass: "modal-header" }, [
+                _c(
+                  "h5",
+                  {
+                    staticClass: "modal-title",
+                    attrs: { id: "exampleModalLabel" },
+                    model: {
+                      value: _vm.modalTitle,
+                      callback: function($$v) {
+                        _vm.modalTitle = $$v
+                      },
+                      expression: "modalTitle"
+                    }
+                  },
+                  [_vm._v(_vm._s(_vm.modalTitle))]
+                ),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "close",
+                    attrs: {
+                      type: "button",
+                      "data-dismiss": "modal",
+                      "aria-label": "Close"
+                    },
+                    on: {
+                      click: function($event) {
+                        _vm.onlyRefeshList()
+                      }
+                    }
+                  },
+                  [
+                    _c("span", { attrs: { "aria-hidden": "true" } }, [
+                      _vm._v("×")
+                    ])
+                  ]
+                )
+              ]),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "modal-body" },
+                [
+                  _c(
+                    "p",
+                    {
+                      model: {
+                        value: _vm.pdvModel,
+                        callback: function($$v) {
+                          _vm.pdvModel = $$v
+                        },
+                        expression: "pdvModel"
+                      }
+                    },
+                    [
+                      _vm._v(
+                        _vm._s(_vm.pdvModel) + " - Estatus del Punto de Venta"
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "select",
+                    {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.selected,
+                          expression: "selected"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      on: {
+                        change: function($event) {
+                          var $$selectedVal = Array.prototype.filter
+                            .call($event.target.options, function(o) {
+                              return o.selected
+                            })
+                            .map(function(o) {
+                              var val = "_value" in o ? o._value : o.value
+                              return val
+                            })
+                          _vm.selected = $event.target.multiple
+                            ? $$selectedVal
+                            : $$selectedVal[0]
+                        }
+                      }
+                    },
+                    [
+                      _c("option", { attrs: { value: "1" } }, [
+                        _vm._v("Autorizada")
+                      ]),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "2" } }, [
+                        _vm._v("Traspazo")
+                      ])
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c("comment", { attrs: { id: _vm.pdvModel } })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-footer" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-secondary",
+                    attrs: { type: "button", "data-dismiss": "modal" },
+                    on: {
+                      click: function($event) {
+                        _vm.onlyRefeshList()
+                      }
+                    }
+                  },
+                  [_vm._v("Close")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-primary",
+                    attrs: { type: "button" },
+                    on: {
+                      click: function($event) {
+                        _vm.updateStatusPDV()
+                      }
+                    }
+                  },
+                  [_vm._v("Save changes")]
+                )
+              ])
+            ])
+          ]
+        )
+      ]
+    )
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("ID")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("PDV")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Region")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Sub Region")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Plaza")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Estatus Adquisicion")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Estatus Contrato")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("PDV Sugerido Por")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Estimado de Apertura")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("No. Q")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Mas Apertura")])
+      ])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-2a2eb5de", module.exports)
+  }
+}
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-4e4170b3\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/Commentstable.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -49143,6 +49643,7 @@ Vue.component('pdv', __webpack_require__("./resources/assets/js/components/Pdv.v
 Vue.component('comment', __webpack_require__("./resources/assets/js/components/Commentstable.vue"));
 Vue.component('comment-get', __webpack_require__("./resources/assets/js/components/CommentsPdv.vue"));
 Vue.component('pdv-update', __webpack_require__("./resources/assets/js/components/PdvModalUpdate.vue"));
+Vue.component('pdv-pagination', __webpack_require__("./resources/assets/js/components/PdvTablePaginator.vue"));
 
 var app = new Vue({
   el: '#app'
@@ -49537,6 +50038,54 @@ if (false) {(function () {
     hotAPI.createRecord("data-v-0b588f23", Component.options)
   } else {
     hotAPI.reload("data-v-0b588f23", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/PdvTablePaginator.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
+/* script */
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/PdvTablePaginator.vue")
+/* template */
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-2a2eb5de\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/PdvTablePaginator.vue")
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/PdvTablePaginator.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-2a2eb5de", Component.options)
+  } else {
+    hotAPI.reload("data-v-2a2eb5de", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true

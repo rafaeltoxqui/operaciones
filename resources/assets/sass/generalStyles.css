@@ -1,6 +1,6 @@
 
 
-/*estilos componente PdvTable*/
+/*estilos componente PdvTable y PdvTablePaginator*/
 .tabletextalign{
 	text-align: center;
 	align-content: center;
@@ -11,6 +11,10 @@
 }
 .anchor-pdv:hover{
 	color:black;
+	text-decoration: underline;
+}
+.pageFocus{
+	color: black;
 	text-decoration: underline;
 }
 

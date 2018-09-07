@@ -24,6 +24,7 @@ Route::put('/pdv/update', 'PuntoVentaController@updateAll')->name('pdv.updateall
 Route::get('/pdv/allpdv', 'PuntoVentaController@getAllPdvJ')->name('pdv.allpdv');
 Route::get('/pdv/{id}', 'PuntoVentaController@show')->name('pdv.show');
 Route::get('/pdv/getpdv/{id}', 'PuntoVentaController@getPdvJ')->name('pdv.getpdv');
+Route::get('/pdvs/pages', 'PuntoVentaController@getAllPdvPagesJ')->name('pdv.pages');
 Route::post('/comment', 'CommentController@create')->name('comment.create');
 Route::get('/comment/getComents/{id}', 'CommentController@showJ')->name('comment.show');
 Route::get('/status/getStatus', 'PdvStatusAdquisicionController@getAllStatusJ')->name('status.getstatus');
@@ -34,7 +35,7 @@ Route::get('/subregion/getsubregions', 'SubregionController@getAllSubregionsJ')-
 Route::get('/tienda/gettiendas', 'TiendaController@getAllStoresJ')->name('tienda.gettiendas');
 Route::put('/tienda/update', 'TiendaController@update')->name('tienda.update');
 Route::get('test', 'TestController@index');
-Route::get('/test/pages', 'TestController@getAllPdvPage')->name('test.pages');
+Route::get('/test/pages', 'TestController@getAllPdvPages')->name('test.pages');
 
 //Route::resource('/test2','TestController2');
 
