@@ -4,6 +4,7 @@
 	<div class="modal-body">
 	  <form>
 	  <div class="row">
+	  	<div class="alert alert-warning" id="oculto"> Warning: the PDV name can't be empty!</div>
 	  	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
 
 	  		<div class="form-group">

@@ -1906,6 +1906,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	data: function data() {
@@ -1923,6 +1924,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			axios.get('/pdv/getpdv/' + id).then(function (response) {
 				_this.pdv = response.data[0];
 				_this.commentid = String(_this.pdv['Comment']);
+			});
+			$('#oculto').fadeIn(1500, function () {
+				$('#oculto').fadeOut(2000);
 			});
 		},
 		pdvModalUpdate: function pdvModalUpdate() {
@@ -1948,6 +1952,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
 //
 //
 //
@@ -2263,7 +2268,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
 //
 //
 //
@@ -37864,6 +37868,12 @@ var render = function() {
       _c("div", { staticClass: "modal-body" }, [
         _c("form", [
           _c("div", { staticClass: "row" }, [
+            _c(
+              "div",
+              { staticClass: "alert alert-warning", attrs: { id: "oculto" } },
+              [_vm._v(" Warning: the PDV name can't be empty!")]
+            ),
+            _vm._v(" "),
             _c("div", { staticClass: "col-xs-6 col-sm-6 col-md-6 col-lg-6" }, [
               _c("div", { staticClass: "form-group" }, [
                 _c("label", [_vm._v("PDV: ")]),
@@ -38353,7 +38363,7 @@ var render = function() {
               type: "button",
               "data-toggle": "tooltip",
               "data-placement": "bottom",
-              title: "Regresar a la Lista de Pdvs"
+              title: "back to pdvs list"
             },
             on: {
               click: function($event) {
@@ -38367,6 +38377,16 @@ var render = function() {
           "div",
           { staticClass: "jumbotron" },
           [
+            _c(
+              "div",
+              {
+                staticClass: "alert alert-success",
+                attrs: { id: "oculto", role: "alert" }
+              },
+              [_c("center", [_vm._v("¡successful edition!")])],
+              1
+            ),
+            _vm._v(" "),
             _c("div", { staticClass: "row" }, [
               _c(
                 "div",
@@ -38380,18 +38400,16 @@ var render = function() {
               _vm._v(" "),
               _c(
                 "div",
-                {
-                  staticClass: "col-xs-1 col-sm-1 col-md-1 col-lg-1",
-                  attrs: { id: "rightAlign" }
-                },
+                { staticClass: "col-xs-1 col-sm-1 col-md-1 col-lg-1" },
                 [
-                  _c("button", {
-                    staticClass: "btn btn-default imgbtn",
+                  _c("i", {
+                    staticClass: "fa fa-edit",
+                    staticStyle: { "font-size": "22px" },
                     attrs: {
-                      type: "button",
+                      id: "rightAlign",
                       "data-toggle": "tooltip",
                       "data-placement": "bottom",
-                      title: "Edit/Update"
+                      title: "Edition Mode"
                     },
                     on: {
                       click: function($event) {
@@ -38563,7 +38581,7 @@ var staticRenderFns = [
       _c(
         "h5",
         { staticClass: "modal-title", attrs: { id: "exampleModalLongTitle" } },
-        [_vm._v("PDV EDITION MODE")]
+        [_vm._v(" EDITION MODE ")]
       ),
       _vm._v(" "),
       _c(

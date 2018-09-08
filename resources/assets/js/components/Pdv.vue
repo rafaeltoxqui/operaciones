@@ -2,11 +2,12 @@
 <div>
 	<div class="row">
 		<div class="col-md-12 col-lg-12">
-		<div class="returnToPdvs"><button class="btn btn-default btnToPdvs" type="button" data-toggle="tooltip" data-placement="bottom" title="Regresar a la Lista de Pdvs" v-on:click="returnToPdvs()"></button></div>
+		<div class="returnToPdvs"><button class="btn btn-default btnToPdvs" type="button" data-toggle="tooltip" data-placement="bottom" title="back to pdvs list" v-on:click="returnToPdvs()"></button></div>
 			<div class="jumbotron">
+				<div class="alert alert-success" id="oculto" role="alert"><center>¡successful edition!</center></div>
 				<div class="row">
 					<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10"><h1 class="display-4">{{pdv.PDV}}</h1></div>
-					<div class="col-xs-1 col-sm-1 col-md-1 col-lg-1" id="rightAlign"><button type="button" class="btn btn-default imgbtn" data-toggle="tooltip" data-placement="bottom" title="Edit/Update" v-on:click="pdvModalUpdate()"></button></div>
+					<div class="col-xs-1 col-sm-1 col-md-1 col-lg-1" ><i class="fa fa-edit" id="rightAlign" style="font-size:22px;" data-toggle="tooltip" data-placement="bottom" title="Edition Mode" v-on:click="pdvModalUpdate()"></i></div>
 				</div>
 				<br>
 				<div class="row">
@@ -31,7 +32,7 @@
 	  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
 	    <div class="modal-content">
 	      <div class="modal-header">
-	        <h5 class="modal-title" id="exampleModalLongTitle">PDV EDITION MODE</h5>
+	        <h5 class="modal-title" id="exampleModalLongTitle"> EDITION MODE </h5>
 	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 	          <span aria-hidden="true">&times;</span>
 	        </button>
@@ -59,6 +60,9 @@
 				axios.get('/pdv/getpdv/'+id).then((response) => {
 					this.pdv = response.data[0];
 					this.commentid = String(this.pdv['Comment']);
+				});
+				$('#oculto').fadeIn(1500,function(){
+					$('#oculto').fadeOut(2000);
 				});
 			},
 			pdvModalUpdate(){
