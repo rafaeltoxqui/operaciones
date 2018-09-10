@@ -25,13 +25,14 @@
 					<span v-if="key==='PDV'">
 						<a class="anchor-pdv" href="#" v-on:click="ir(row)">{{item}}</a>
 					</span>
-					<span v-else v-on:click="pdvModal(row)">{{item}}</span>
+					<span v-else >{{item}}</span>
 					
 				</td>
-				<td v-on:click="pdvModal(row)">Expert Cell</td>
-				<td v-on:click="pdvModal(row)">2</td>
-				<td v-on:click="pdvModal(row)">3</td>
-				<td v-on:click="pdvModal(row)">Agosto</td>
+				<td>Expert Cell</td>
+				<td>2</td>
+				<td>3</td>
+				<td>Agosto</td>
+				<td v-on:click="pdvModal(row)"><i class="fa fa-pencil" id="pencil"></i></td>
 			</tr>
 		</tbody>
 	</table>
@@ -56,7 +57,7 @@
 	        </button>
 	      </div>
 	      <div class="modal-body">
-	        <p v-model="pdvModel">{{pdvModel}} - Estatus del Punto de Venta</p>
+	        <p>Estatus del Punto de Venta</p>
 	    
 	        	<select class="form-control" v-model="selected">
 	        		<option value="1">Autorizada</option>
@@ -101,17 +102,16 @@
 			createPages(){
 				this.pages = [];
 				for(var i = 1;i <= this.lastPage;i++){
-					if(i === 1){
-						this.pages.push({ubication: i, class:"pageFocus"});
-					}else{
-						this.pages.push({ubication: i,class:""});
-					}
+					this.pages.push({ubication: i, class:""});
 				}
 			},
 			clickpage(index,page){
 				this.pages.filter(function(elem){
 					elem.class = "";
 				});
+				if(index === ''){
+					index = 0;
+				}
 				axios.get('pdvs/pages?page='+page.ubication).then((response) => {
 					this.pages[index].class = "pageFocus";
 					this.llave = index;
@@ -149,8 +149,8 @@
 				this.clickpage(this.llave,this.onlyOnePage);
 			}
 		},
-		beforeMount: function(){//metodo uncial para llenar la lista 
+		beforeMount: function(){//metodo uncial para llenar la lista y los paginados
 			this.fillList();
-		}
+		},
 	}
 </script>

@@ -10,14 +10,14 @@ class CommentController extends Controller
 {
     public function create(Request $request){
     	$newComment = new Comment();
-    	$newComment->comment = $request->comentario;
+        $newComment->id_pdv = $request->idPdv;
+    	$newComment->comment = $request->comment;
     	$newComment->save();
-    	return TRUE;
+    	return json_encode(['message' => 'TRUE']);
     }
 
     public function showJ(Request $request){
-    	$idcomment = PDV::find($request->id);
-    	$coments = Comment::where('id','=',$idcomment->id_pdv_comment)->get();
+    	$coments = Comment::where('id_pdv','=',$request->id)->get();
     	return $coments;
     }
 }

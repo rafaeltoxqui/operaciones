@@ -21,7 +21,6 @@ class CreatePdvsTable extends Migration
             $table->bigInteger('id_plaza')->unsigned();
             $table->bigInteger('id_pdv_status_adquisicion')->unsigned();
             $table->bigInteger('id_pdv_status_contrato')->unsigned();
-            $table->bigInteger('id_pdv_comment')->unsigned();
             $table->timestamps();
         });
     }

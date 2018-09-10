@@ -20,7 +20,6 @@ class CreateForeignKeys extends Migration
             $table->foreign('id_plaza')->references('id')->on('plazas');
             $table->foreign('id_pdv_status_adquisicion')->references('id')->on('pdv_status_adquisicions');
             $table->foreign('id_pdv_status_contrato')->references('id')->on('pdv_status_contratos');
-            $table->foreign('id_pdv_comment')->references('id')->on('pdv_comments');
         });
     }
 
@@ -34,7 +33,6 @@ class CreateForeignKeys extends Migration
         Schema::table('pdvs', function (Blueprint $table) {
             $table->dropForeign('pdvs_id_pdv_status_contrato_foreign');
             $table->dropForeign('pdvs_id_pdv_status_adquisicion_foreign');
-            $table->dropForeign('pdvs_id_pdv_comment_foreign');
             $table->dropForeign('pdvs_id_plaza_foreign');
             $table->dropForeign('pdvs_id_subregion_foreign');
             $table->dropForeign('pdvs_id_region_foreign');

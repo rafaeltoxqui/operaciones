@@ -19,7 +19,7 @@
 }
 
 
-/*estilos componente Pdv*/
+/*estilos componente Pdv y el comoponente CommentsPdv*/
 #textstyle{
 	font-weight: bold;
 }
@@ -29,11 +29,16 @@
 	margin-left: 5px;
 	margin-top: 5px;
 }
-.returnToPdvs:hover, #rightAlign:hover{
+.returnToPdvs:hover, #rightAlign:hover, #pencil:hover{
 	transform: scale(1.5);
 	cursor: pointer;
 }
-
+#ocultoMenssage{
+	display: none;
+}
+.btnComment{
+	width: 100%;
+}
 
 #oculto{/*Para alert de succeful*/
 	display: none;

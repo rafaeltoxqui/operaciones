@@ -1645,11 +1645,25 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	data: function data() {
 		return {
-			comentario: []
+			comentarios: [],
+			newComment: ''
 		};
 	},
 
@@ -1659,7 +1673,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		}
 	},
 	created: function created() {
-		console.log(this.id);
+		//console.log(this.id);
 		this.getCommentList();
 	},
 
@@ -1668,9 +1682,31 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			var _this = this;
 
 			var tmpId = $('#id').val(); //Cambiar esto al parecer no es el metodo correcto. Ver porque no me da nada en el props
+			//console.log(tmpId);
 			axios.get('/comment/getComents/' + tmpId).then(function (data) {
-				_this.comentario = data.data[0];
+				_this.comentarios = data.data;
+				//console.log(data.data[0].comment);
 			});
+		},
+		addNewComment: function addNewComment() {
+			var tmpId = $('#id').val();
+			var responseValue = '';
+			if (this.newComment != '') {
+				axios.post('/comment', { idPdv: tmpId, comment: this.newComment }).then(function (response) {
+					responseValue = response.data['message'];
+					//console.log(responseValue);
+				}).catch(function (error) {
+					$('#ocultoMenssage').fadeIn(1500, function () {
+						$('#ocultoMenssage').fadeOut(2500);
+					});
+				});
+			} else {
+				$('#ocultoMenssage').fadeIn(1500, function () {
+					$('#ocultoMenssage').fadeOut(2500);
+				});
+			}
+			this.newComment = '';
+			this.getCommentList();
 		}
 	}
 });
@@ -1688,6 +1724,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	data: function data() {
@@ -1696,12 +1733,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		};
 	},
 
+	props: {
+		id: {
+			type: String
+		}
+	},
 	methods: {
-		/*commentCreate(){
-  	axios.post('/comment',{comment : this.comment}).then((response) =>{
-  		console.log('Comentario' + response);
-  	});
-  },*/
+		commentCreate: function commentCreate() {
+			if (comment === '') {
+				axios.post('/comment', { idPdv: this.id, comment: this.comment }).then(function (response) {
+					console.log('Comentario' + response);
+				});
+			} else {
+				this.comment = '¡Modificacioon del status!';
+			}
+		}
 	}
 });
 
@@ -1912,8 +1958,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 	data: function data() {
 		return {
 			pdv: [],
-			commentid: ''
+			pdvId: ''
 		};
+	},
+	mounted: function mounted() {
+		var id = $('#id').val();
 	},
 
 	methods: {
@@ -1923,7 +1972,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			var id = $('#id').val();
 			axios.get('/pdv/getpdv/' + id).then(function (response) {
 				_this.pdv = response.data[0];
-				_this.commentid = String(_this.pdv['Comment']);
+				_this.pdvId = String(_this.pdv['id']);
 			});
 			$('#oculto').fadeIn(1500, function () {
 				$('#oculto').fadeOut(2000);
@@ -1938,6 +1987,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		}
 	},
 	created: function created() {
+		var id = $('#id').val();
 		this.getPdv();
 		$(function () {
 			$('[data-toggle="tooltip"]').tooltip();
@@ -2077,9 +2127,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				_this.Pdv = _this.firstOpt.PDV;
 				_this.Noq = 2;
 				if (_this.firstOpt.Comment == "") {
-					_this.comentario = 'Actualizacion de los datos del PDV.';
-				} else {
-					_this.comentario = _this.firstOpt.Comment;
+					_this.comentario = 'Modificacion de datos del PDV.';
 				}
 			});
 		},
@@ -2346,6 +2394,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	data: function data() {
@@ -2375,11 +2424,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		createPages: function createPages() {
 			this.pages = [];
 			for (var i = 1; i <= this.lastPage; i++) {
-				if (i === 1) {
-					this.pages.push({ ubication: i, class: "pageFocus" });
-				} else {
-					this.pages.push({ ubication: i, class: "" });
-				}
+				this.pages.push({ ubication: i, class: "" });
 			}
 		},
 		clickpage: function clickpage(index, page) {
@@ -2388,6 +2433,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			this.pages.filter(function (elem) {
 				elem.class = "";
 			});
+			if (index === '') {
+				index = 0;
+			}
 			axios.get('pdvs/pages?page=' + page.ubication).then(function (response) {
 				_this2.pages[index].class = "pageFocus";
 				_this2.llave = index;
@@ -2425,7 +2473,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		}
 	},
 	beforeMount: function beforeMount() {
-		//metodo uncial para llenar la lista 
+		//metodo uncial para llenar la lista y los paginados
 		this.fillList();
 	}
 });
@@ -37518,31 +37566,17 @@ var render = function() {
                           [_vm._v(_vm._s(item))]
                         )
                       ])
-                    : _c(
-                        "span",
-                        {
-                          on: {
-                            click: function($event) {
-                              _vm.pdvModal(row)
-                            }
-                          }
-                        },
-                        [_vm._v(_vm._s(item))]
-                      )
+                    : _c("span", [_vm._v(_vm._s(item))])
                 ])
               }),
               _vm._v(" "),
-              _c(
-                "td",
-                {
-                  on: {
-                    click: function($event) {
-                      _vm.pdvModal(row)
-                    }
-                  }
-                },
-                [_vm._v("Expert Cell")]
-              ),
+              _c("td", [_vm._v("Expert Cell")]),
+              _vm._v(" "),
+              _c("td", [_vm._v("2")]),
+              _vm._v(" "),
+              _c("td", [_vm._v("3")]),
+              _vm._v(" "),
+              _c("td", [_vm._v("Agosto")]),
               _vm._v(" "),
               _c(
                 "td",
@@ -37553,31 +37587,12 @@ var render = function() {
                     }
                   }
                 },
-                [_vm._v("2")]
-              ),
-              _vm._v(" "),
-              _c(
-                "td",
-                {
-                  on: {
-                    click: function($event) {
-                      _vm.pdvModal(row)
-                    }
-                  }
-                },
-                [_vm._v("3")]
-              ),
-              _vm._v(" "),
-              _c(
-                "td",
-                {
-                  on: {
-                    click: function($event) {
-                      _vm.pdvModal(row)
-                    }
-                  }
-                },
-                [_vm._v("Agosto")]
+                [
+                  _c("i", {
+                    staticClass: "fa fa-pencil",
+                    attrs: { id: "pencil" }
+                  })
+                ]
               )
             ],
             2
@@ -37671,23 +37686,7 @@ var render = function() {
                 "div",
                 { staticClass: "modal-body" },
                 [
-                  _c(
-                    "p",
-                    {
-                      model: {
-                        value: _vm.pdvModel,
-                        callback: function($$v) {
-                          _vm.pdvModel = $$v
-                        },
-                        expression: "pdvModel"
-                      }
-                    },
-                    [
-                      _vm._v(
-                        _vm._s(_vm.pdvModel) + " - Estatus del Punto de Venta"
-                      )
-                    ]
-                  ),
+                  _c("p", [_vm._v("Estatus del Punto de Venta")]),
                   _vm._v(" "),
                   _c(
                     "select",
@@ -37841,10 +37840,25 @@ var render = function() {
           _vm.comment = $event.target.value
         }
       }
-    })
+    }),
+    _vm._v(" "),
+    _vm._m(0)
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("h6", [
+      _c("span", { staticClass: "small" }, [
+        _vm._v(
+          ' "state modification" is the default comment if you do not post a comment'
+        )
+      ])
+    ])
+  }
+]
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -38279,16 +38293,81 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c("div", { staticClass: "alert alert-info" }, [
-      _c("h6", [
-        _vm._v(_vm._s(_vm.comentario.comment) + " "),
-        _c("span", { staticClass: "small" }, [
-          _vm._v(" created: " + _vm._s(_vm.comentario.created_at))
+  return _c(
+    "div",
+    [
+      _c("div", { staticClass: "row" }, [
+        _c("div", { staticClass: "col-xs-1 col-sm-1 col-md-1 col-lg-1" }),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "col-xs-10 col-sm-10 col-md-10 col-lg-10" },
+          _vm._l(_vm.comentarios, function(comentario) {
+            return _c("div", { staticClass: "alert alert-info" }, [
+              _c("h6", [
+                _vm._v(_vm._s(comentario.comment) + " "),
+                _c("span", { staticClass: "small" }, [
+                  _vm._v(" created: " + _vm._s(comentario.created_at))
+                ])
+              ])
+            ])
+          })
+        )
+      ]),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass: "alert alert-warning",
+          attrs: { id: "ocultoMenssage", role: "alert" }
+        },
+        [_c("center", [_vm._v("WARNING:¡ The comment cannot be empty !")])],
+        1
+      ),
+      _vm._v(" "),
+      _c("br"),
+      _vm._v(" "),
+      _c("center", [
+        _c("div", { staticClass: "col-xs-7 col-sm-7 col-md-7 col-lg-7" }, [
+          _c("textarea", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.newComment,
+                expression: "newComment"
+              }
+            ],
+            staticClass: "form-control btnComment",
+            attrs: { rows: "2" },
+            domProps: { value: _vm.newComment },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.newComment = $event.target.value
+              }
+            }
+          }),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-default btnComment",
+              on: {
+                click: function($event) {
+                  _vm.addNewComment()
+                }
+              }
+            },
+            [_vm._v("ADD COMMENT")]
+          )
         ])
       ])
-    ])
-  ])
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -38523,7 +38602,7 @@ var render = function() {
             _vm._v(" "),
             _c("p", [_vm._v("COMENTARIOS:")]),
             _vm._v(" "),
-            _c("comment-get", { attrs: { id: _vm.commentid } })
+            _c("comment-get", { attrs: { id: _vm.pdvId } })
           ],
           1
         )

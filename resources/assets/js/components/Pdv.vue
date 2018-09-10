@@ -23,7 +23,7 @@
 				</div>
 				<hr class="my-4">
 				<p>COMENTARIOS:</p>
-				<comment-get :id="commentid"></comment-get>
+				<comment-get :id="pdvId"></comment-get>
 			</div>
 		</div>
 	</div>
@@ -48,18 +48,23 @@
 </template>
 <script>
 	export default{
+
 		data(){
 			return {
 				pdv : [],
-				commentid : '',
+				pdvId : '',
 			};
+		},
+		mounted(){
+			var id = $('#id').val();
+
 		},
 		methods : {
 			getPdv(){
 				var id = $('#id').val();
 				axios.get('/pdv/getpdv/'+id).then((response) => {
 					this.pdv = response.data[0];
-					this.commentid = String(this.pdv['Comment']);
+					this.pdvId = String(this.pdv['id']);
 				});
 				$('#oculto').fadeIn(1500,function(){
 					$('#oculto').fadeOut(2000);
@@ -74,6 +79,7 @@
 			}
 		},
 		created() {
+			var id = $('#id').val();
 			this.getPdv();
 			$(function () {  $('[data-toggle="tooltip"]').tooltip()});//Inicializa tooltip
     	},

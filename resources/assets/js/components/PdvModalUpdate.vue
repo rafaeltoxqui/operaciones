@@ -120,9 +120,7 @@
 					this.Pdv = this.firstOpt.PDV;
 					this.Noq = 2;
 					if(this.firstOpt.Comment == ""){
-						this.comentario = 'Actualizacion de los datos del PDV.';
-					}else{
-						this.comentario = this.firstOpt.Comment;
+						this.comentario = 'Modificacion de datos del PDV.';
 					}
 				});
 			},

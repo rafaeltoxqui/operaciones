@@ -15,6 +15,8 @@ class CreatePdvCommentsTable extends Migration
     {
         Schema::create('pdv_comments', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->bigInteger('id_pdv')->unsigned();
+            $table->foreign('id_pdv')->references('id')->on('pdvs');
             $table->text('comment');
             $table->timestamps();
         });
