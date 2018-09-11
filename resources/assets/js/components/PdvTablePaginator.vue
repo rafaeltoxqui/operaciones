@@ -63,8 +63,9 @@
 	        		<option value="1">Autorizada</option>
 	        		<option value="2">Traspazo</option>
 	        	</select>
-	        	<comment :id="pdvModel"></comment>
-	        </form>
+				Comentario:
+				<textarea class="form-control" v-model="newComment" v-bind:placeholder="newComment" rows="10"></textarea>
+				<h6><span class="small"> "state modification" is the default comment if you do not post a comment</span></h6>
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-secondary" data-dismiss="modal" v-on:click="onlyRefeshList()">Close</button>
@@ -89,6 +90,7 @@
 				selected: '',//listado
 				llave:'',//para recargar el sitio
 				onlyOnePage:[], //para regarcar el sitio
+				newComment: '',//para el comentario deafult o el que el usuario ponga
 			};
 		},
 		methods:{//Metodos para paginado
@@ -96,6 +98,7 @@
 				axios.get('/pdvs/pages').then((response) => {
 					this.list = response.data.data;
 					this.lastPage = response.data.last_page;
+					this.newComment = "state modification";
 					this.createPages();
 				});
 			},
@@ -139,8 +142,14 @@
 			},
 			updateStatusPDV(){
 				axios.post('/pdv',{id:this.pdvModel,estatus:this.selected}).then(function(response){
+					//console.log(response.data);
 				});
-				//this.getPdvList();
+				if(this.newComment === ''){
+					this.newComment = "state modification";
+				}
+				axios.post('/comment',{idPdv:this.pdvModel,comment:this.newComment}).then((response) => {
+					//console.log(response.data);
+				});
 				this.onlyRefeshList();
 				$('#exampleModal').modal('hide');
 			},

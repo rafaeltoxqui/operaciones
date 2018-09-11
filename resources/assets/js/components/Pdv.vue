@@ -23,7 +23,7 @@
 				</div>
 				<hr class="my-4">
 				<p>COMENTARIOS:</p>
-				<comment-get :id="pdvId"></comment-get>
+				<comment-get :id="pdvId" :bandera="flag"></comment-get>
 			</div>
 		</div>
 	</div>
@@ -32,7 +32,7 @@
 	  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
 	    <div class="modal-content">
 	      <div class="modal-header">
-	        <h5 class="modal-title" id="exampleModalLongTitle"> EDITION MODE </h5>
+	        <h5 class="modal-title" id="exampleModalLongTitle"><i class="fa fa-edit" style="font-size:22px;"></i> EDITION MODE </h5>
 	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 	          <span aria-hidden="true">&times;</span>
 	        </button>
@@ -53,19 +53,20 @@
 			return {
 				pdv : [],
 				pdvId : '',
+				flag : false,
 			};
 		},
 		mounted(){
-			var id = $('#id').val();
-
+			//var id = $('#id').val();
 		},
 		methods : {
 			getPdv(){
 				var id = $('#id').val();
+				this.pdvId = String(id);
 				axios.get('/pdv/getpdv/'+id).then((response) => {
 					this.pdv = response.data[0];
-					this.pdvId = String(this.pdv['id']);
 				});
+				this.flag = true;
 				$('#oculto').fadeIn(1500,function(){
 					$('#oculto').fadeOut(2000);
 				});
@@ -79,7 +80,7 @@
 			}
 		},
 		created() {
-			var id = $('#id').val();
+			//var id = $('#id').val();
 			this.getPdv();
 			$(function () {  $('[data-toggle="tooltip"]').tooltip()});//Inicializa tooltip
     	},

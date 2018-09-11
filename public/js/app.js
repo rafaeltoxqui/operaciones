@@ -1670,10 +1670,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 	props: {
 		id: {
 			type: String
+		},
+		bandera: {
+			type: Boolean
 		}
 	},
-	created: function created() {
-		//console.log(this.id);
+	mounted: function mounted() {
 		this.getCommentList();
 	},
 
@@ -1681,11 +1683,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		getCommentList: function getCommentList() {
 			var _this = this;
 
-			var tmpId = $('#id').val(); //Cambiar esto al parecer no es el metodo correcto. Ver porque no me da nada en el props
-			//console.log(tmpId);
-			axios.get('/comment/getComents/' + tmpId).then(function (data) {
+			axios.get('/comment/getComents/' + this.id).then(function (data) {
 				_this.comentarios = data.data;
-				//console.log(data.data[0].comment);
 			});
 		},
 		addNewComment: function addNewComment() {
@@ -1694,7 +1693,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			if (this.newComment != '') {
 				axios.post('/comment', { idPdv: tmpId, comment: this.newComment }).then(function (response) {
 					responseValue = response.data['message'];
-					//console.log(responseValue);
 				}).catch(function (error) {
 					$('#ocultoMenssage').fadeIn(1500, function () {
 						$('#ocultoMenssage').fadeOut(2500);
@@ -1708,45 +1706,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			this.newComment = '';
 			this.getCommentList();
 		}
-	}
-});
-
-/***/ }),
-
-/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/Commentstable.vue":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
-//
-//
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-	data: function data() {
-		return {
-			comment: ''
-		};
 	},
-
-	props: {
-		id: {
-			type: String
-		}
-	},
-	methods: {
-		commentCreate: function commentCreate() {
-			if (comment === '') {
-				axios.post('/comment', { idPdv: this.id, comment: this.comment }).then(function (response) {
-					console.log('Comentario' + response);
-				});
-			} else {
-				this.comment = '¡Modificacioon del status!';
-			}
+	watch: {
+		bandera: function bandera() {
+			console.log(this.bandera);
+			this.getCommentList();
+			this.bandera = false;
 		}
 	}
 });
@@ -1958,11 +1923,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 	data: function data() {
 		return {
 			pdv: [],
-			pdvId: ''
+			pdvId: '',
+			flag: false
 		};
 	},
 	mounted: function mounted() {
-		var id = $('#id').val();
+		//var id = $('#id').val();
 	},
 
 	methods: {
@@ -1970,10 +1936,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			var _this = this;
 
 			var id = $('#id').val();
+			this.pdvId = String(id);
 			axios.get('/pdv/getpdv/' + id).then(function (response) {
 				_this.pdv = response.data[0];
-				_this.pdvId = String(_this.pdv['id']);
 			});
+			this.flag = true;
 			$('#oculto').fadeIn(1500, function () {
 				$('#oculto').fadeOut(2000);
 			});
@@ -1987,7 +1954,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		}
 	},
 	created: function created() {
-		var id = $('#id').val();
+		//var id = $('#id').val();
 		this.getPdv();
 		$(function () {
 			$('[data-toggle="tooltip"]').tooltip();
@@ -2002,6 +1969,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
 //
 //
 //
@@ -2125,11 +2093,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			axios.get('/pdv/getpdv/' + idPdv).then(function (response) {
 				_this.firstOpt = response.data[0];
 				_this.Pdv = _this.firstOpt.PDV;
-				_this.Noq = 2;
-				if (_this.firstOpt.Comment == "") {
-					_this.comentario = 'Modificacion de datos del PDV.';
-				}
 			});
+			this.Noq = 2;
+			this.comentario = 'PDV Modification';
 		},
 		fillFields: function fillFields() {
 			var _this2 = this;
@@ -2168,20 +2134,30 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			}
 			var idPdv = this.firstOpt.id;
 			var idTiendaPdv = this.firstOpt.idTienda;
-			axios.put('/pdv/update', {
-				id: idPdv, idTienda: idTiendaPdv, idRegion: this.Region, idSubregion: this.Subregion, idPlaza: this.Plaza,
-				idStatusAdquisicion: this.estatusadquisicion, idStatusContrato: this.estatuscontrato
-			}).then(function (response) {
-				//console.log(response.data);
-			}).catch(function (error) {
-				//console.log(error.response);
-			});
-			axios.put('/tienda/update', { id: idTiendaPdv, Name: this.Pdv }).then(function (response) {
-				//console.log(response.data);
-			});
-			this.getPdv();
-			$('#exampleModalCenter').modal('hide');
-			this.$emit('updateYou');
+			if (this.Pdv === '') {
+				$('#ocultoModal').fadeIn(1500, function () {
+					$('#ocultoModal').fadeOut(2500);
+				});
+			} else {
+				axios.put('/pdv/update', {
+					id: idPdv, idTienda: idTiendaPdv, idRegion: this.Region, idSubregion: this.Subregion, idPlaza: this.Plaza,
+					idStatusAdquisicion: this.estatusadquisicion, idStatusContrato: this.estatuscontrato
+				}).then(function (response) {}).catch(function (error) {
+					//console.log(error.response;
+				});
+				axios.put('/tienda/update', { id: idTiendaPdv, Name: this.Pdv }).then(function (response) {
+					//console.log(response.data);
+				});
+				if (this.comentario === '') {
+					this.comentario = "PDV Modification";
+				}
+				axios.post('/comment', { idPdv: idPdv, comment: this.comentario }).then(function (response) {
+					//console.log(response.data);
+				});
+				this.getPdv();
+				$('#exampleModalCenter').modal('hide');
+				this.$emit('updateYou');
+			}
 		}
 	}
 });
@@ -2259,6 +2235,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2267,12 +2244,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			pdvData: [],
 			pdvModel: '',
 			modalTitle: '',
-			selected: ''
+			selected: '',
+			newComment: ''
 		};
 	},
 	mounted: function mounted() {
 		this.getPdvList();
-		var element = document.querySelector('.anchor-pdv');
+		this.newComment = "state modification";
+		//var element = document.querySelector('.anchor-pdv');
 	},
 
 	methods: {
@@ -2301,7 +2280,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			$('#exampleModal').modal('show');
 		},
 		updateStatusPDV: function updateStatusPDV() {
-			axios.post('/pdv', { id: this.pdvModel, estatus: this.selected }).then(function (response) {});
+			axios.post('/pdv', { id: this.pdvModel, estatus: this.selected }).then(function (response) {
+				//console.log(response.data);
+			});
+			if (this.newComment === '') {
+				this.newComment = "state modification";
+			}
+			axios.post('/comment', { idPdv: this.pdvModel, comment: this.newComment }).then(function (response) {
+				//console.log(response.data);
+			});
 			this.getPdvList();
 			$('#exampleModal').modal('hide');
 		}
@@ -2395,6 +2382,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	data: function data() {
@@ -2406,7 +2394,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			modalTitle: '', //listado
 			selected: '', //listado
 			llave: '', //para recargar el sitio
-			onlyOnePage: [] //para regarcar el sitio
+			onlyOnePage: [], //para regarcar el sitio
+			newComment: '' //para el comentario deafult o el que el usuario ponga
 		};
 	},
 
@@ -2418,6 +2407,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			axios.get('/pdvs/pages').then(function (response) {
 				_this.list = response.data.data;
 				_this.lastPage = response.data.last_page;
+				_this.newComment = "state modification";
 				_this.createPages();
 			});
 		},
@@ -2462,8 +2452,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			$('#exampleModal').modal('show');
 		},
 		updateStatusPDV: function updateStatusPDV() {
-			axios.post('/pdv', { id: this.pdvModel, estatus: this.selected }).then(function (response) {});
-			//this.getPdvList();
+			axios.post('/pdv', { id: this.pdvModel, estatus: this.selected }).then(function (response) {
+				//console.log(response.data);
+			});
+			if (this.newComment === '') {
+				this.newComment = "state modification";
+			}
+			axios.post('/comment', { idPdv: this.pdvModel, comment: this.newComment }).then(function (response) {
+				//console.log(response.data);
+			});
 			this.onlyRefeshList();
 			$('#exampleModal').modal('hide');
 		},
@@ -37164,71 +37161,88 @@ var render = function() {
                 )
               ]),
               _vm._v(" "),
-              _c(
-                "div",
-                { staticClass: "modal-body" },
-                [
-                  _c(
-                    "p",
-                    {
-                      model: {
-                        value: _vm.pdvModel,
-                        callback: function($$v) {
-                          _vm.pdvModel = $$v
-                        },
-                        expression: "pdvModel"
+              _c("div", { staticClass: "modal-body" }, [
+                _c(
+                  "p",
+                  {
+                    model: {
+                      value: _vm.pdvModel,
+                      callback: function($$v) {
+                        _vm.pdvModel = $$v
+                      },
+                      expression: "pdvModel"
+                    }
+                  },
+                  [
+                    _vm._v(
+                      _vm._s(_vm.pdvModel) + " - Estatus del Punto de Venta"
+                    )
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "select",
+                  {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.selected,
+                        expression: "selected"
                       }
-                    },
-                    [
-                      _vm._v(
-                        _vm._s(_vm.pdvModel) + " - Estatus del Punto de Venta"
-                      )
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "select",
-                    {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.selected,
-                          expression: "selected"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      on: {
-                        change: function($event) {
-                          var $$selectedVal = Array.prototype.filter
-                            .call($event.target.options, function(o) {
-                              return o.selected
-                            })
-                            .map(function(o) {
-                              var val = "_value" in o ? o._value : o.value
-                              return val
-                            })
-                          _vm.selected = $event.target.multiple
-                            ? $$selectedVal
-                            : $$selectedVal[0]
-                        }
+                    ],
+                    staticClass: "form-control",
+                    on: {
+                      change: function($event) {
+                        var $$selectedVal = Array.prototype.filter
+                          .call($event.target.options, function(o) {
+                            return o.selected
+                          })
+                          .map(function(o) {
+                            var val = "_value" in o ? o._value : o.value
+                            return val
+                          })
+                        _vm.selected = $event.target.multiple
+                          ? $$selectedVal
+                          : $$selectedVal[0]
                       }
-                    },
-                    [
-                      _c("option", { attrs: { value: "1" } }, [
-                        _vm._v("Autorizada")
-                      ]),
-                      _vm._v(" "),
-                      _c("option", { attrs: { value: "2" } }, [
-                        _vm._v("Traspazo")
-                      ])
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c("comment", { attrs: { id: _vm.pdvModel } })
-                ],
-                1
-              ),
+                    }
+                  },
+                  [
+                    _c("option", { attrs: { value: "1" } }, [
+                      _vm._v("Autorizada")
+                    ]),
+                    _vm._v(" "),
+                    _c("option", { attrs: { value: "2" } }, [
+                      _vm._v("Traspazo")
+                    ])
+                  ]
+                ),
+                _vm._v("\r\n\t\t\t\tComentario:\r\n\t\t\t\t"),
+                _c("textarea", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.newComment,
+                      expression: "newComment"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: { rows: "10" },
+                  domProps: { value: _vm.newComment },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.newComment = $event.target.value
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _vm._m(1)
+              ]),
               _vm._v(" "),
               _c("div", { staticClass: "modal-footer" }, [
                 _c(
@@ -37294,6 +37308,18 @@ var staticRenderFns = [
         _c("th", { attrs: { scope: "col" } }, [_vm._v("Estatus Contrato")]),
         _vm._v(" "),
         _c("th", { attrs: { scope: "col" } }, [_vm._v("PDV Sugerido Por")])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("h6", [
+      _c("span", { staticClass: "small" }, [
+        _vm._v(
+          ' "state modification" is the default comment if you do not post a comment'
+        )
       ])
     ])
   }
@@ -37682,55 +37708,72 @@ var render = function() {
                 )
               ]),
               _vm._v(" "),
-              _c(
-                "div",
-                { staticClass: "modal-body" },
-                [
-                  _c("p", [_vm._v("Estatus del Punto de Venta")]),
-                  _vm._v(" "),
-                  _c(
-                    "select",
-                    {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.selected,
-                          expression: "selected"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      on: {
-                        change: function($event) {
-                          var $$selectedVal = Array.prototype.filter
-                            .call($event.target.options, function(o) {
-                              return o.selected
-                            })
-                            .map(function(o) {
-                              var val = "_value" in o ? o._value : o.value
-                              return val
-                            })
-                          _vm.selected = $event.target.multiple
-                            ? $$selectedVal
-                            : $$selectedVal[0]
-                        }
+              _c("div", { staticClass: "modal-body" }, [
+                _c("p", [_vm._v("Estatus del Punto de Venta")]),
+                _vm._v(" "),
+                _c(
+                  "select",
+                  {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.selected,
+                        expression: "selected"
                       }
-                    },
-                    [
-                      _c("option", { attrs: { value: "1" } }, [
-                        _vm._v("Autorizada")
-                      ]),
-                      _vm._v(" "),
-                      _c("option", { attrs: { value: "2" } }, [
-                        _vm._v("Traspazo")
-                      ])
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c("comment", { attrs: { id: _vm.pdvModel } })
-                ],
-                1
-              ),
+                    ],
+                    staticClass: "form-control",
+                    on: {
+                      change: function($event) {
+                        var $$selectedVal = Array.prototype.filter
+                          .call($event.target.options, function(o) {
+                            return o.selected
+                          })
+                          .map(function(o) {
+                            var val = "_value" in o ? o._value : o.value
+                            return val
+                          })
+                        _vm.selected = $event.target.multiple
+                          ? $$selectedVal
+                          : $$selectedVal[0]
+                      }
+                    }
+                  },
+                  [
+                    _c("option", { attrs: { value: "1" } }, [
+                      _vm._v("Autorizada")
+                    ]),
+                    _vm._v(" "),
+                    _c("option", { attrs: { value: "2" } }, [
+                      _vm._v("Traspazo")
+                    ])
+                  ]
+                ),
+                _vm._v("\r\n\t\t\t\tComentario:\r\n\t\t\t\t"),
+                _c("textarea", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.newComment,
+                      expression: "newComment"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: { placeholder: _vm.newComment, rows: "10" },
+                  domProps: { value: _vm.newComment },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.newComment = $event.target.value
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _vm._m(1)
+              ]),
               _vm._v(" "),
               _c("div", { staticClass: "modal-footer" }, [
                 _c(
@@ -37798,54 +37841,7 @@ var staticRenderFns = [
         _c("th", { attrs: { scope: "col" } }, [_vm._v("Mas Apertura")])
       ])
     ])
-  }
-]
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-2a2eb5de", module.exports)
-  }
-}
-
-/***/ }),
-
-/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-4e4170b3\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/Commentstable.vue":
-/***/ (function(module, exports, __webpack_require__) {
-
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("div", [
-    _vm._v("\r\n\tComentario:\r\n\t"),
-    _c("textarea", {
-      directives: [
-        {
-          name: "model",
-          rawName: "v-model",
-          value: _vm.comment,
-          expression: "comment"
-        }
-      ],
-      staticClass: "form-control",
-      attrs: { rows: "10" },
-      domProps: { value: _vm.comment },
-      on: {
-        input: function($event) {
-          if ($event.target.composing) {
-            return
-          }
-          _vm.comment = $event.target.value
-        }
-      }
-    }),
-    _vm._v(" "),
-    _vm._m(0)
-  ])
-}
-var staticRenderFns = [
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -37864,7 +37860,7 @@ module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-4e4170b3", module.exports)
+    require("vue-hot-reload-api")      .rerender("data-v-2a2eb5de", module.exports)
   }
 }
 
@@ -37880,17 +37876,18 @@ var render = function() {
   return _c("div", [
     _c("div", { staticClass: "heigtModal" }, [
       _c("div", { staticClass: "modal-body" }, [
+        _c(
+          "div",
+          { staticClass: "alert alert-warning", attrs: { id: "ocultoModal" } },
+          [_c("center", [_vm._v(" Warning: the PDV name can't be empty! ")])],
+          1
+        ),
+        _vm._v(" "),
         _c("form", [
           _c("div", { staticClass: "row" }, [
-            _c(
-              "div",
-              { staticClass: "alert alert-warning", attrs: { id: "oculto" } },
-              [_vm._v(" Warning: the PDV name can't be empty!")]
-            ),
-            _vm._v(" "),
             _c("div", { staticClass: "col-xs-6 col-sm-6 col-md-6 col-lg-6" }, [
               _c("div", { staticClass: "form-group" }, [
-                _c("label", [_vm._v("PDV: ")]),
+                _c("label", [_vm._v("*PDV: ")]),
                 _vm._v(" "),
                 _c("input", {
                   directives: [
@@ -37916,7 +37913,7 @@ var render = function() {
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "form-group" }, [
-                _c("label", [_vm._v("Region: ")]),
+                _c("label", [_vm._v("*Region: ")]),
                 _vm._v(" "),
                 _c(
                   "select",
@@ -37966,7 +37963,7 @@ var render = function() {
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "form-group" }, [
-                _c("label", [_vm._v("Subregion: ")]),
+                _c("label", [_vm._v("*Subregion: ")]),
                 _vm._v(" "),
                 _c(
                   "select",
@@ -38020,7 +38017,7 @@ var render = function() {
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "form-group" }, [
-                _c("label", [_vm._v("Plaza: ")]),
+                _c("label", [_vm._v("*Plaza: ")]),
                 _vm._v(" "),
                 _c(
                   "select",
@@ -38070,7 +38067,7 @@ var render = function() {
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "form-group" }, [
-                _c("label", [_vm._v("No. Q: ")]),
+                _c("label", [_vm._v("*No. Q: ")]),
                 _vm._v(" "),
                 _c("input", {
                   directives: [
@@ -38102,7 +38099,7 @@ var render = function() {
             _vm._v(" "),
             _c("div", { staticClass: "col-xs-6 col-sm-6 col-md-6 col-lg-6" }, [
               _c("div", { staticClass: "form-group" }, [
-                _c("label", [_vm._v("Estatus Contrato: ")]),
+                _c("label", [_vm._v("*Estatus Contrato: ")]),
                 _vm._v(" "),
                 _c(
                   "select",
@@ -38156,7 +38153,7 @@ var render = function() {
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "form-group" }, [
-                _c("label", [_vm._v("Estatus Adquisicion: ")]),
+                _c("label", [_vm._v("*Estatus Adquisicion: ")]),
                 _vm._v(" "),
                 _c(
                   "select",
@@ -38214,7 +38211,7 @@ var render = function() {
               _c("hr"),
               _vm._v(" "),
               _c("div", { staticClass: "form-group" }, [
-                _c("label", [_vm._v("Comentario: ")]),
+                _c("label", [_vm._v("*Comentario: ")]),
                 _vm._v(" "),
                 _c("textarea", {
                   directives: [
@@ -38240,7 +38237,9 @@ var render = function() {
                       _vm.$forceUpdate()
                     }
                   }
-                })
+                }),
+                _vm._v(" "),
+                _vm._m(0)
               ])
             ])
           ])
@@ -38274,7 +38273,20 @@ var render = function() {
     ])
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("h6", [
+      _c("span", { staticClass: "small" }, [
+        _vm._v(
+          '"PDV Modification" is the default comment if you do not post a comment.'
+        )
+      ])
+    ])
+  }
+]
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -38306,7 +38318,7 @@ var render = function() {
             return _c("div", { staticClass: "alert alert-info" }, [
               _c("h6", [
                 _vm._v(_vm._s(comentario.comment) + " "),
-                _c("span", { staticClass: "small" }, [
+                _c("span", { staticClass: "small", attrs: { id: "FYHC" } }, [
                   _vm._v(" created: " + _vm._s(comentario.created_at))
                 ])
               ])
@@ -38321,7 +38333,7 @@ var render = function() {
           staticClass: "alert alert-warning",
           attrs: { id: "ocultoMenssage", role: "alert" }
         },
-        [_c("center", [_vm._v("WARNING:¡ The comment cannot be empty !")])],
+        [_c("center", [_vm._v("WARNING: ¡The comment cannot be empty!")])],
         1
       ),
       _vm._v(" "),
@@ -38354,7 +38366,8 @@ var render = function() {
           _c(
             "button",
             {
-              staticClass: "btn btn-default btnComment",
+              staticClass: "btn btn-primary btn-sm",
+              attrs: { type: "button", id: "btnComment" },
               on: {
                 click: function($event) {
                   _vm.addNewComment()
@@ -38602,7 +38615,7 @@ var render = function() {
             _vm._v(" "),
             _c("p", [_vm._v("COMENTARIOS:")]),
             _vm._v(" "),
-            _c("comment-get", { attrs: { id: _vm.pdvId } })
+            _c("comment-get", { attrs: { id: _vm.pdvId, bandera: _vm.flag } })
           ],
           1
         )
@@ -38660,7 +38673,13 @@ var staticRenderFns = [
       _c(
         "h5",
         { staticClass: "modal-title", attrs: { id: "exampleModalLongTitle" } },
-        [_vm._v(" EDITION MODE ")]
+        [
+          _c("i", {
+            staticClass: "fa fa-edit",
+            staticStyle: { "font-size": "22px" }
+          }),
+          _vm._v(" EDITION MODE ")
+        ]
       ),
       _vm._v(" "),
       _c(
@@ -49737,7 +49756,6 @@ Vue.component('example-component', __webpack_require__("./resources/assets/js/co
 Vue.component('table-modal', __webpack_require__("./resources/assets/js/components/MyComponent.vue")); //ejemplo Test
 Vue.component('pdv-table', __webpack_require__("./resources/assets/js/components/PdvTable.vue"));
 Vue.component('pdv', __webpack_require__("./resources/assets/js/components/Pdv.vue"));
-Vue.component('comment', __webpack_require__("./resources/assets/js/components/Commentstable.vue"));
 Vue.component('comment-get', __webpack_require__("./resources/assets/js/components/CommentsPdv.vue"));
 Vue.component('pdv-update', __webpack_require__("./resources/assets/js/components/PdvModalUpdate.vue"));
 Vue.component('pdv-pagination', __webpack_require__("./resources/assets/js/components/PdvTablePaginator.vue"));
@@ -49847,54 +49865,6 @@ if (false) {(function () {
     hotAPI.createRecord("data-v-4fb499f2", Component.options)
   } else {
     hotAPI.reload("data-v-4fb499f2", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-
-/***/ "./resources/assets/js/components/Commentstable.vue":
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
-/* script */
-var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/Commentstable.vue")
-/* template */
-var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-4e4170b3\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/Commentstable.vue")
-/* template functional */
-var __vue_template_functional__ = false
-/* styles */
-var __vue_styles__ = null
-/* scopeId */
-var __vue_scopeId__ = null
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __vue_script__,
-  __vue_template__,
-  __vue_template_functional__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
-)
-Component.options.__file = "resources/assets/js/components/Commentstable.vue"
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-4e4170b3", Component.options)
-  } else {
-    hotAPI.reload("data-v-4e4170b3", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true

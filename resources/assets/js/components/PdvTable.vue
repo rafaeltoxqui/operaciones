@@ -50,8 +50,9 @@
 	        		<option value="1">Autorizada</option>
 	        		<option value="2">Traspazo</option>
 	        	</select>
-	        	<comment :id="pdvModel"></comment>
-	        </form>
+				Comentario:
+				<textarea class="form-control" v-model="newComment" rows="10"></textarea>
+				<h6><span class="small"> "state modification" is the default comment if you do not post a comment</span></h6>
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-secondary" data-dismiss="modal" v-on:click="getPdvList()">Close</button>
@@ -73,12 +74,14 @@
 				pdvModel: '',
 				modalTitle: '',
 				selected: '',
+				newComment: '',
 			};
 		},
 
 		mounted() {
 			this.getPdvList();
-			var element = document.querySelector('.anchor-pdv');
+			this.newComment = "state modification";
+			//var element = document.querySelector('.anchor-pdv');
 		},
 		methods : {
 			getPdvList() {
@@ -105,6 +108,13 @@
 			},
 			updateStatusPDV(){
 				axios.post('/pdv',{id:this.pdvModel,estatus:this.selected}).then(function(response){
+					//console.log(response.data);
+				});
+				if(this.newComment === ''){
+					this.newComment = "state modification";
+				}
+				axios.post('/comment',{idPdv:this.pdvModel,comment:this.newComment}).then((response) => {
+					//console.log(response.data);
 				});
 				this.getPdvList();
 				$('#exampleModal').modal('hide');

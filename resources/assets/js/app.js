@@ -19,7 +19,6 @@ Vue.component('example-component', require('./components/ExampleComponent.vue'))
 Vue.component('table-modal', require('./components/MyComponent.vue'));//ejemplo Test
 Vue.component('pdv-table', require('./components/PdvTable.vue'));
 Vue.component('pdv', require('./components/Pdv.vue'));
-Vue.component('comment', require('./components/Commentstable.vue'));
 Vue.component('comment-get', require('./components/CommentsPdv.vue'));
 Vue.component('pdv-update', require('./components/PdvModalUpdate.vue'));
 Vue.component('pdv-pagination', require('./components/PdvTablePaginator'));

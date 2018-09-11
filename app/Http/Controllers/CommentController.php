@@ -9,6 +9,9 @@ use App\pdv as PDV;
 class CommentController extends Controller
 {
     public function create(Request $request){
+        if($request->comment == '' || $request->comment == NULL){
+            $request->comment = "PDV Modification";
+        }
     	$newComment = new Comment();
         $newComment->id_pdv = $request->idPdv;
     	$newComment->comment = $request->comment;

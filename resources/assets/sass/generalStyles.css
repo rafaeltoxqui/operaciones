@@ -36,11 +36,14 @@
 #ocultoMenssage{
 	display: none;
 }
-.btnComment{
+#btnComment{
 	width: 100%;
 }
+#FYHC{
+	font-style: italic;
+}
 
-#oculto{/*Para alert de succeful*/
+#oculto, #ocultoModal{/*Para alert de succeful y el del modal*/
 	display: none;
 }
 .btnToPdvs{
