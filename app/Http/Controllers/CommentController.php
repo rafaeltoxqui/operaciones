@@ -10,7 +10,7 @@ class CommentController extends Controller
 {
     public function create(Request $request){
         if($request->comment == '' || $request->comment == NULL){
-            $request->comment = "PDV Modification";
+            $request->comment = "THE PDV WAS MODIFIED";
         }
     	$newComment = new Comment();
         $newComment->id_pdv = $request->idPdv;

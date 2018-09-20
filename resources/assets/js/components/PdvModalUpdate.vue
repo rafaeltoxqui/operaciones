@@ -75,7 +75,7 @@
 	  		<div class="form-group">
 	  			<label>* Comentario: </label>
 	  			<textarea class="form-control" id="Textarea1" rows="6" v-model.trim="comentario"></textarea>
-	  			<h6><span class="small">"PDV Modification" is the default comment if you do not post a comment.</span></h6>
+	  			<h6><span class="small">"THE PDV WAS MODIFIED" is the default comment if you do not post a comment.</span></h6>
 	  		</div>
 
 	  	</div>
@@ -121,7 +121,7 @@
 					this.Pdv = this.firstOpt.PDV;
 				});
 				this.Noq = 2;
-				this.comentario = 'PDV Modification';
+				this.comentario = 'THE PDV WAS MODIFIED';
 			},
 			fillFields(){
 				axios.get('/region/getregions').then((response) => {
@@ -174,7 +174,7 @@
 						//console.log(response.data);
 					});
 					if(this.comentario === ''){
-						this.comentario = "PDV Modification";
+						this.comentario = "THE PDV WAS MODIFIED";
 					}
 					axios.post('/comment',{idPdv:idPdv, comment:this.comentario}).then((response) => {
 						//console.log(response.data);
@@ -182,6 +182,7 @@
 					this.getPdv();
 					$('#exampleModalCenter').modal('hide');
 					this.$emit('updateYou');
+					this.$eventHub.$emit('updateComments');
 				}
 			},
 		},

@@ -1658,6 +1658,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	data: function data() {
@@ -1670,10 +1675,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 	props: {
 		id: {
 			type: String
-		},
-		bandera: {
-			type: Boolean
 		}
+	},
+	created: function created() {
+		this.$eventHub.$on('updateComments', this.getCommentList);
 	},
 	mounted: function mounted() {
 		this.getCommentList();
@@ -1705,13 +1710,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			}
 			this.newComment = '';
 			this.getCommentList();
-		}
-	},
-	watch: {
-		bandera: function bandera() {
-			console.log(this.bandera);
-			this.getCommentList();
-			this.bandera = false;
 		}
 	}
 });
@@ -1923,8 +1921,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 	data: function data() {
 		return {
 			pdv: [],
-			pdvId: '',
-			flag: false
+			pdvId: ''
 		};
 	},
 	mounted: function mounted() {
@@ -1940,7 +1937,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			axios.get('/pdv/getpdv/' + id).then(function (response) {
 				_this.pdv = response.data[0];
 			});
-			this.flag = true;
 			$('#oculto').fadeIn(1500, function () {
 				$('#oculto').fadeOut(2000);
 			});
@@ -2095,7 +2091,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				_this.Pdv = _this.firstOpt.PDV;
 			});
 			this.Noq = 2;
-			this.comentario = 'PDV Modification';
+			this.comentario = 'THE PDV WAS MODIFIED';
 		},
 		fillFields: function fillFields() {
 			var _this2 = this;
@@ -2149,7 +2145,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 					//console.log(response.data);
 				});
 				if (this.comentario === '') {
-					this.comentario = "PDV Modification";
+					this.comentario = "THE PDV WAS MODIFIED";
 				}
 				axios.post('/comment', { idPdv: idPdv, comment: this.comentario }).then(function (response) {
 					//console.log(response.data);
@@ -2157,6 +2153,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				this.getPdv();
 				$('#exampleModalCenter').modal('hide');
 				this.$emit('updateYou');
+				this.$eventHub.$emit('updateComments');
 			}
 		}
 	}
@@ -2415,14 +2412,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				axios.get('/pdvs/pages').then(function (response) {
 					_this.list = response.data.data;
 					_this.lastPage = response.data.last_page;
-					_this.newComment = "state modification";
+					_this.newComment = "The state was modified";
 					_this.createPages();
 				});
 			} else {
 				axios.post('/pdvs/searchByStore', { search: this.valueSearch }).then(function (response) {
 					_this.list = response.data.data;
 					_this.lastPage = response.data.last_page;
-					_this.newComment = 'state modification';
+					_this.newComment = 'The state was modified';
 					_this.createPages();
 				});
 			}
@@ -2481,7 +2478,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				//console.log(response.data);
 			});
 			if (this.newComment === '') {
-				this.newComment = "state modification";
+				this.newComment = "The state was modified";
 			}
 			axios.post('/comment', { idPdv: this.pdvModel, comment: this.newComment }).then(function (response) {
 				//console.log(response.data);
@@ -37860,7 +37857,7 @@ var render = function() {
                     [
                       _c("center", [
                         _vm._v(
-                          ' "state modification" is the default comment if you do not post a comment '
+                          ' "The state was modified" is the default comment if you do not post a comment '
                         )
                       ])
                     ],
@@ -38363,7 +38360,7 @@ var staticRenderFns = [
     return _c("h6", [
       _c("span", { staticClass: "small" }, [
         _vm._v(
-          '"PDV Modification" is the default comment if you do not post a comment.'
+          '"THE PDV WAS MODIFIED" is the default comment if you do not post a comment.'
         )
       ])
     ])
@@ -38393,20 +38390,30 @@ var render = function() {
       _c("div", { staticClass: "row" }, [
         _c("div", { staticClass: "col-xs-1 col-sm-1 col-md-1 col-lg-1" }),
         _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "col-xs-10 col-sm-10 col-md-10 col-lg-10" },
-          _vm._l(_vm.comentarios, function(comentario) {
-            return _c("div", { staticClass: "alert alert-info" }, [
-              _c("h6", [
-                _vm._v(_vm._s(comentario.comment) + " "),
-                _c("span", { staticClass: "small", attrs: { id: "FYHC" } }, [
-                  _vm._v(" created: " + _vm._s(comentario.created_at))
+        _c("div", { staticClass: "col-xs-10 col-sm-10 col-md-10 col-lg-10" }, [
+          _c(
+            "fieldset",
+            { staticClass: "fieldComentarios" },
+            [
+              _vm._m(0),
+              _vm._v(" "),
+              _vm._l(_vm.comentarios, function(comentario) {
+                return _c("div", { staticClass: "alert alert-info" }, [
+                  _c("h6", [
+                    _c("i", { staticClass: "fa fa-comment" }),
+                    _vm._v(": " + _vm._s(comentario.comment) + " "),
+                    _c(
+                      "span",
+                      { staticClass: "small", attrs: { id: "FYHC" } },
+                      [_vm._v(" created: " + _vm._s(comentario.created_at))]
+                    )
+                  ])
                 ])
-              ])
-            ])
-          })
-        )
+              })
+            ],
+            2
+          )
+        ])
       ]),
       _vm._v(" "),
       _c(
@@ -38464,7 +38471,20 @@ var render = function() {
     1
   )
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("legend", { staticClass: "legenFielComentarios" }, [
+      _c("h5", [
+        _c("span", { staticClass: "small" }, [
+          _c("strong", [_vm._v("  COMENTARIOS  ")])
+        ])
+      ])
+    ])
+  }
+]
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -38643,7 +38663,7 @@ var render = function() {
                 { staticClass: "col-xs-4 col-sm-4 col-md-4 col-lg-4" },
                 [
                   _c("h5", [
-                    _vm._v(" Id: "),
+                    _vm._v(" * Id: "),
                     _c(
                       "span",
                       { staticClass: "small", attrs: { id: "textstyle" } },
@@ -38658,7 +38678,7 @@ var render = function() {
                 { staticClass: "col-xs-4 col-sm-4 col-md-4 col-lg-4" },
                 [
                   _c("h5", [
-                    _vm._v(" Region: "),
+                    _vm._v(" * Region: "),
                     _c(
                       "span",
                       { staticClass: "small", attrs: { id: "textstyle" } },
@@ -38673,7 +38693,7 @@ var render = function() {
                 { staticClass: "col-xs-4 col-sm-4 col-md-4 col-lg-4" },
                 [
                   _c("h5", [
-                    _vm._v(" Subregion: "),
+                    _vm._v(" * Subregion: "),
                     _c(
                       "span",
                       { staticClass: "small", attrs: { id: "textstyle" } },
@@ -38692,7 +38712,7 @@ var render = function() {
                 { staticClass: "col-xs-4 col-sm-4 col-md-4 col-lg-4" },
                 [
                   _c("h5", [
-                    _vm._v(" Plaza: "),
+                    _vm._v(" * Plaza: "),
                     _c(
                       "span",
                       { staticClass: "small", attrs: { id: "textstyle" } },
@@ -38707,7 +38727,7 @@ var render = function() {
                 { staticClass: "col-xs-4 col-sm-4 col-md-4 col-lg-4" },
                 [
                   _c("h5", [
-                    _vm._v(" Estatus contrato: "),
+                    _vm._v(" * Estatus contrato: "),
                     _c(
                       "span",
                       { staticClass: "small", attrs: { id: "textstyle" } },
@@ -38722,7 +38742,7 @@ var render = function() {
                 { staticClass: "col-xs-4 col-sm-4 col-md-4 col-lg-4" },
                 [
                   _c("h5", [
-                    _vm._v(" Estatus adquisicion: "),
+                    _vm._v(" * Estatus adquisicion: "),
                     _c(
                       "span",
                       { staticClass: "small", attrs: { id: "textstyle" } },
@@ -38735,9 +38755,7 @@ var render = function() {
             _vm._v(" "),
             _c("hr", { staticClass: "my-4" }),
             _vm._v(" "),
-            _c("p", [_vm._v("COMENTARIOS:")]),
-            _vm._v(" "),
-            _c("comment-get", { attrs: { id: _vm.pdvId, bandera: _vm.flag } })
+            _c("comment-get", { attrs: { id: _vm.pdvId } })
           ],
           1
         )

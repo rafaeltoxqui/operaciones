@@ -3,9 +3,14 @@
 	<div class="row">
 		<div class="col-xs-1 col-sm-1 col-md-1 col-lg-1"></div>
 		<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
-			<div class="alert alert-info" v-for="comentario in comentarios">
-				<h6>{{comentario.comment}} <span class="small" id="FYHC"> created: {{comentario.created_at}}</span></h6>
-			</div>
+			<fieldset class="fieldComentarios">
+				<legend class="legenFielComentarios">
+					<h5><span class="small"><strong>&nbsp;&nbsp;COMENTARIOS&nbsp;&nbsp;</strong></span></h5>
+				</legend>
+				<div class="alert alert-info" v-for="comentario in comentarios">
+					<h6><i class="fa fa-comment"></i>: {{comentario.comment}} <span class="small" id="FYHC"> created: {{comentario.created_at}}</span></h6>
+				</div>
+			</fieldset>
 		</div>
 	</div>
 	<div class="alert alert-warning" id="ocultoMenssage" role="alert"><center>WARNING: ¡The comment cannot be empty!</center></div>
@@ -30,9 +35,9 @@
 			id: {
 				type: String,
 			},
-			bandera: {
-				type: Boolean,
-			},
+		},
+		created(){
+			this.$eventHub.$on('updateComments', this.getCommentList);
 		},
 		mounted(){
 			this.getCommentList();
@@ -62,13 +67,6 @@
 				this.newComment = '';
 				this.getCommentList();
 			},	
-		},
-		watch:{
-			bandera:function(){
-				console.log(this.bandera);
-				this.getCommentList();
-				this.bandera = false;
-			},
 		},
 	}
 </script>

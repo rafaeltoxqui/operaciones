@@ -11,19 +11,19 @@
 				</div>
 				<br>
 				<div class="row">
-					<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4"><h5> Id: <span class="small" id="textstyle">{{pdv.id}} </span></h5></div>
-					<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4"><h5> Region: <span class="small" id="textstyle">{{pdv.Region}} </span></h5></div>
-					<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4"><h5> Subregion: <span class="small" id="textstyle">{{pdv.Subregion}} </span></h5></div>
+					<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4"><h5> *&nbsp;Id: <span class="small" id="textstyle">{{pdv.id}} </span></h5></div>
+					<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4"><h5> *&nbsp;Region: <span class="small" id="textstyle">{{pdv.Region}} </span></h5></div>
+					<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4"><h5> *&nbsp;Subregion: <span class="small" id="textstyle">{{pdv.Subregion}} </span></h5></div>
 				</div>
 				<br>
 				<div class="row">
-					<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4"><h5> Plaza: <span class="small" id="textstyle">{{pdv.Plaza}} </span></h5></div>
-					<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4"><h5> Estatus contrato: <span class="small" id="textstyle">{{pdv.FirmaContrato}} </span></h5></div>
-					<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4"><h5> Estatus adquisicion: <span class="small" id="textstyle">{{pdv.Estatus}} </span></h5></div>
+					<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4"><h5> *&nbsp;Plaza: <span class="small" id="textstyle">{{pdv.Plaza}} </span></h5></div>
+					<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4"><h5> *&nbsp;Estatus contrato: <span class="small" id="textstyle">{{pdv.FirmaContrato}} </span></h5></div>
+					<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4"><h5> *&nbsp;Estatus adquisicion: <span class="small" id="textstyle">{{pdv.Estatus}} </span></h5></div>
 				</div>
 				<hr class="my-4">
-				<p>COMENTARIOS:</p>
-				<comment-get :id="pdvId" :bandera="flag"></comment-get>
+				<!--<p>COMENTARIOS:</p>-->
+				<comment-get :id="pdvId"></comment-get>
 			</div>
 		</div>
 	</div>
@@ -53,7 +53,6 @@
 			return {
 				pdv : [],
 				pdvId : '',
-				flag : false,
 			};
 		},
 		mounted(){
@@ -66,7 +65,6 @@
 				axios.get('/pdv/getpdv/'+id).then((response) => {
 					this.pdv = response.data[0];
 				});
-				this.flag = true;
 				$('#oculto').fadeIn(1500,function(){
 					$('#oculto').fadeOut(2000);
 				});

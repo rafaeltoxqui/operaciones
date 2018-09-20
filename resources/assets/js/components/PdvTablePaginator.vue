@@ -66,7 +66,7 @@
 	        	</select>
 				* Comentario: 
 				<textarea class="form-control" v-model="newComment" v-bind:placeholder="newComment" rows="10"></textarea>
-				<h6><span class="small"><center> "state modification" is the default comment if you do not post a comment </center></span></h6>
+				<h6><span class="small"><center> "The state was modified" is the default comment if you do not post a comment </center></span></h6>
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-secondary" data-dismiss="modal" v-on:click="onlyRefeshList()">Close</button>
@@ -106,14 +106,14 @@
 					axios.get('/pdvs/pages').then((response) => {
 						this.list = response.data.data;
 						this.lastPage = response.data.last_page;
-						this.newComment = "state modification";
+						this.newComment = "The state was modified";
 						this.createPages();
 					});
 				}else{
 					axios.post('/pdvs/searchByStore',{search:this.valueSearch}).then((response) => {
 						this.list = response.data.data;
 						this.lastPage = response.data.last_page;
-						this.newComment = 'state modification';
+						this.newComment = 'The state was modified';
 						this.createPages();
 					});
 				}
@@ -170,7 +170,7 @@
 					//console.log(response.data);
 				});
 				if(this.newComment === ''){
-					this.newComment = "state modification";
+					this.newComment = "The state was modified";
 				}
 				axios.post('/comment',{idPdv:this.pdvModel,comment:this.newComment}).then((response) => {
 					//console.log(response.data);
