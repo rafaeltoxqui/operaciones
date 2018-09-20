@@ -12,6 +12,7 @@ class PuntoVentaController extends Controller
     }
 
     public function getAllPdvJ(){
+        //funciona solo con el pdvTable - no el paginador
         $puntosVenta = \DB::table('pdvs')
         ->select('pdvs.id as id', 'tiendas.name as PDV','regions.name as Region','subregions.name as Subregion','plazas.name as Plaza','pdv_status_adquisicions.status as Estatus','pdv_status_contratos.status as FirmaContrato')
         ->join('pdv_status_adquisicions', 'pdvs.id_pdv_status_adquisicion', '=', 'pdv_status_adquisicions.id')
@@ -39,8 +40,23 @@ class PuntoVentaController extends Controller
 
     }
 
+    public function updateAll(Request $request){
+        $pdv = PDV::find($request->id);
+        $pdv->id_region = $request->idRegion;
+        $pdv->id_subregion = $request->idSubregion;
+        $pdv->id_plaza = $request->idPlaza;
+        $pdv->id_pdv_status_adquisicion = $request->idStatusAdquisicion;
+        $pdv->id_pdv_status_contrato = $request->idStatusContrato;
+        $pdv->save();
+        return json_encode(['EXITO']);
+    }
+
+    public function show(Request $request){
+        return view('exp_operaciones/PuntoVenta', array('id'=>$request->id));
+    }
+
     public function getPdvJ(Request $request){
-        //funciona con el componente de PdvTable
+        //Funciona para traer los datos de solo un pdv(para la segunda vista)
         $puntoVenta = \DB::table('pdvs')
         ->select('pdvs.id as id', 'tiendas.name as PDV','regions.name as Region','subregions.name as Subregion','plazas.name as Plaza','pdv_status_adquisicions.status as Estatus','pdv_status_contratos.status as FirmaContrato','pdvs.id_tienda as idTienda','pdvs.id_region as idRegion','pdvs.id_subregion as idSubregion', 'pdvs.id_plaza as idPlaza', 'pdvs.id_pdv_status_adquisicion as idEstatus', 'pdvs.id_pdv_status_contrato as idFirmaContrato')
         ->join('pdv_status_adquisicions', 'pdvs.id_pdv_status_adquisicion', '=', 'pdv_status_adquisicions.id')
@@ -69,19 +85,34 @@ class PuntoVentaController extends Controller
         return response()->json($puntosVenta);
     }
 
-    public function show(Request $request){
-        return view('exp_operaciones/PuntoVenta', array('id'=>$request->id));
+
+/*METODOS PARA LAS BUSQUEDAS */
+    public function searchByStoreNameJ(Request $request){
+        $returnValue = NULL;
+        if($request->search != ''){
+            $foundList = \DB::table('pdvs')
+            ->select('pdvs.id as id','tiendas.name as PDV','regions.name as Region','subregions.name as Subregion','plazas.name as Plaza','pdv_status_adquisicions.status as Estatus','pdv_status_contratos.status as FirmaContrato')
+            ->join('tiendas', 'pdvs.id_tienda', '=', 'tiendas.id')
+            ->join('regions', 'pdvs.id_region', '=', 'regions.id')
+            ->join('subregions','pdvs.id_subregion', '=', 'subregions.id')
+            ->join('plazas','pdvs.id_plaza', '=', 'plazas.id')
+            ->join('pdv_status_adquisicions','pdvs.id_pdv_status_adquisicion', '=', 'pdv_status_adquisicions.id')
+            ->join('pdv_status_contratos', 'pdvs.id_pdv_status_contrato', '=', 'pdv_status_contratos.id')
+            ->where('tiendas.name', 'LIKE', "%{$request->search}%")
+            ->OrderBy('pdvs.id')
+            ->paginate(7);
+            if(!empty($foundList)){
+                $returnValue = $foundList;
+            }else{
+                $returnValue = json_encode(['mensaje' => "Ningun registro Encontrado"]);
+            }
+        }else{
+            $returnValue = json_encode(["mensaje"=>"Criterio De Busqueda Vacio"]);
+        }
+        return $returnValue;
     }
 
-    public function updateAll(Request $request){
-        $pdv = PDV::find($request->id);
-        $pdv->id_region = $request->idRegion;
-        $pdv->id_subregion = $request->idSubregion;
-        $pdv->id_plaza = $request->idPlaza;
-        $pdv->id_pdv_status_adquisicion = $request->idStatusAdquisicion;
-        $pdv->id_pdv_status_contrato = $request->idStatusContrato;
-        $pdv->save();
-        return json_encode(['EXITO']);
-    }
+
+
 
 }

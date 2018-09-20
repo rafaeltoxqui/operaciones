@@ -8,6 +8,7 @@
 require('./bootstrap');
 
 window.Vue = require('vue');
+Vue.prototype.$eventHub = new Vue();
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -21,7 +22,8 @@ Vue.component('pdv-table', require('./components/PdvTable.vue'));
 Vue.component('pdv', require('./components/Pdv.vue'));
 Vue.component('comment-get', require('./components/CommentsPdv.vue'));
 Vue.component('pdv-update', require('./components/PdvModalUpdate.vue'));
-Vue.component('pdv-pagination', require('./components/PdvTablePaginator'));
+Vue.component('pdv-pagination', require('./components/PdvTablePaginator.vue'));
+Vue.component('pdv-search', require('./components/SearchComponent.vue'));
 
 const app = new Vue({
     el: '#app'

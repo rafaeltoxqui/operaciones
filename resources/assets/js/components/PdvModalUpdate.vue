@@ -8,12 +8,12 @@
 	  	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
 
 	  		<div class="form-group">
-	  			<label>*PDV: </label>
+	  			<label>* PDV: </label>
 	  			<input class="form-control" name="tienda" v-model="Pdv">
 	  		</div>
 
 	  		<div class="form-group">
-	  			<label>*Region: </label>
+	  			<label>* Region: </label>
 	  			<select class="form-control" v-model="Region">
 	  				<option disabled value="">{{firstOpt.Region}}</option>
 	  				<option v-for="region in regions" v-bind:value="region.id">
@@ -23,7 +23,7 @@
 	  		</div>
 
 	  		<div class="form-group">
-	  			<label>*Subregion: </label>
+	  			<label>* Subregion: </label>
 	  			<select class="form-control" v-model="Subregion">
 	  				<option disabled value="">{{firstOpt.Subregion}}</option>
 	  				<option v-for="subregion in subregions" v-bind:value="subregion.id">
@@ -33,7 +33,7 @@
 	  		</div>
 
 	  		<div class="form-group">
-	  			<label>*Plaza: </label>
+	  			<label>* Plaza: </label>
 	  			<select class="form-control" v-model="Plaza">
 	  				<option disabled value="">{{firstOpt.Plaza}}</option>
 	  				<option v-for="plaza in plazas" v-bind:value="plaza.id">
@@ -43,7 +43,7 @@
 	  		</div>
 
 	  		<div class="form-group">
-	  			<label>*No. Q: </label>
+	  			<label>* No. Q: </label>
 	  			<input type="text" class="form-control" name="noq" v-model.trim="Noq">
 	  		</div>
 
@@ -51,7 +51,7 @@
 	  	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
 
 	  		<div class="form-group">
-	  			<label>*Estatus Contrato: </label>
+	  			<label>* Estatus Contrato: </label>
 	  			<select class="form-control" v-model="estatuscontrato">
 	  				<option disabled value="">{{firstOpt.FirmaContrato}}</option>
 	  				<option v-for="contrato in estauscontratofirmado" v-bind:value="contrato.id">
@@ -61,7 +61,7 @@
 	  		</div>
 
 	  		<div class="form-group">
-	  			<label>*Estatus Adquisicion: </label>
+	  			<label>* Estatus Adquisicion: </label>
 	  			<select class="form-control" v-model="estatusadquisicion">
 	  				<option disabled value="">{{firstOpt.Estatus}}</option>
 	  				<option v-for="adquisicion in estadquisicion" v-bind:value="adquisicion.id">
@@ -73,7 +73,7 @@
 	  		<br>
 	  		<hr>
 	  		<div class="form-group">
-	  			<label>*Comentario: </label>
+	  			<label>* Comentario: </label>
 	  			<textarea class="form-control" id="Textarea1" rows="6" v-model.trim="comentario"></textarea>
 	  			<h6><span class="small">"PDV Modification" is the default comment if you do not post a comment.</span></h6>
 	  		</div>

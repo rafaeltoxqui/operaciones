@@ -25,6 +25,9 @@ Route::get('/pdv/allpdv', 'PuntoVentaController@getAllPdvJ')->name('pdv.allpdv')
 Route::get('/pdv/{id}', 'PuntoVentaController@show')->name('pdv.show');
 Route::get('/pdv/getpdv/{id}', 'PuntoVentaController@getPdvJ')->name('pdv.getpdv');
 Route::get('/pdvs/pages', 'PuntoVentaController@getAllPdvPagesJ')->name('pdv.pages');
+//metodos para las busquedas
+Route::post('/pdvs/searchByStore', 'PuntoVentaController@searchByStoreNameJ')->name('pdv.searchbystore');
+//////
 Route::post('/comment', 'CommentController@create')->name('comment.create');
 Route::get('/comment/getComents/{id}', 'CommentController@showJ')->name('comment.show');
 Route::get('/status/getStatus', 'PdvStatusAdquisicionController@getAllStatusJ')->name('status.getstatus');

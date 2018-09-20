@@ -57,15 +57,16 @@
 	        </button>
 	      </div>
 	      <div class="modal-body">
-	        <p>Estatus del Punto de Venta</p>
+	        <p>* Estatus Adquisicion de punto de venta: </p>
 	    
 	        	<select class="form-control" v-model="selected">
+	        		<option disabled value="">{{modalStatus}}</option>
 	        		<option value="1">Autorizada</option>
 	        		<option value="2">Traspazo</option>
 	        	</select>
-				Comentario:
+				* Comentario: 
 				<textarea class="form-control" v-model="newComment" v-bind:placeholder="newComment" rows="10"></textarea>
-				<h6><span class="small"> "state modification" is the default comment if you do not post a comment</span></h6>
+				<h6><span class="small"><center> "state modification" is the default comment if you do not post a comment </center></span></h6>
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-secondary" data-dismiss="modal" v-on:click="onlyRefeshList()">Close</button>
@@ -84,23 +85,38 @@
 			return{
 				pages : [],//paginado
 				lastPage : 1,//paginado
-				list: [],//paginado, listado
+				list: [],//paginado, listado de una pagina
 				pdvModel: '',//listado
 				modalTitle: '',//listado
+				modalStatus: '',//listado
 				selected: '',//listado
 				llave:'',//para recargar el sitio
 				onlyOnePage:[], //para regarcar el sitio
 				newComment: '',//para el comentario deafult o el que el usuario ponga
+				flag:'',//bandera que dice si es post o get
+				valueSearch: '', //valor a buscar
 			};
+		},
+		created(){
+			this.$eventHub.$on('warn', this.search);
 		},
 		methods:{//Metodos para paginado
 			fillList(){
-				axios.get('/pdvs/pages').then((response) => {
-					this.list = response.data.data;
-					this.lastPage = response.data.last_page;
-					this.newComment = "state modification";
-					this.createPages();
-				});
+				if(this.flag !== 'POST'){
+					axios.get('/pdvs/pages').then((response) => {
+						this.list = response.data.data;
+						this.lastPage = response.data.last_page;
+						this.newComment = "state modification";
+						this.createPages();
+					});
+				}else{
+					axios.post('/pdvs/searchByStore',{search:this.valueSearch}).then((response) => {
+						this.list = response.data.data;
+						this.lastPage = response.data.last_page;
+						this.newComment = 'state modification';
+						this.createPages();
+					});
+				}
 			},
 			createPages(){
 				this.pages = [];
@@ -115,12 +131,21 @@
 				if(index === ''){
 					index = 0;
 				}
-				axios.get('pdvs/pages?page='+page.ubication).then((response) => {
-					this.pages[index].class = "pageFocus";
-					this.llave = index;
-					this.onlyOnePage = page;
-					this.list = response.data.data;
-				});
+				if(this.flag !== 'POST'){
+					axios.get('pdvs/pages?page='+page.ubication).then((response) => {
+						this.pages[index].class = "pageFocus";
+						this.llave = index;
+						this.onlyOnePage = page;
+						this.list = response.data.data;
+					});
+				}else{
+					axios.post('/pdvs/searchByStore?page='+page.ubication,{search:this.valueSearch}).then((response) => {
+						this.pages[index].class = "pageFocus";
+						this.llave = index;
+						this.onlyOnePage = page;
+						this.list = response.data.data;
+					});
+				}
 			},
 			// Aqui comienzan metodos para listado 
 			ir(row){
@@ -137,7 +162,7 @@
 				}
 				this.pdvModel = pdv.id;
 				this.modalTitle = pdv.PDV;
-				//console.log(this.pdvModel);
+				this.modalStatus = pdv.Estatus;
 				$('#exampleModal').modal('show');
 			},
 			updateStatusPDV(){
@@ -156,6 +181,21 @@
 			onlyRefeshList(){
 				this.fillList();
 				this.clickpage(this.llave,this.onlyOnePage);
+			},
+			search(){
+				//console.log("EXITO CON EL BUS");
+				var searchValue = $('#search').val();
+				if(searchValue != ''){
+					this.valueSearch = searchValue;
+					this.flag = 'POST';
+					$('#search').val('');
+					this.fillList();
+				}else{
+					this.flag = 'GET';
+					$('#search').val('');
+					this.fillList();
+				}
+				//this.clickpage(this.llave,this.onlyOnePage);
 			}
 		},
 		beforeMount: function(){//metodo uncial para llenar la lista y los paginados

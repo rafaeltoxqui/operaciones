@@ -1,6 +1,9 @@
 
 
 /*estilos componente PdvTable y PdvTablePaginator*/
+.TitleGrid{
+	text-align: right;
+}
 .tabletextalign{
 	text-align: center;
 	align-content: center;
@@ -17,6 +20,11 @@
 	color: black;
 	text-decoration: underline;
 }
+#search{
+	width: 80%;
+	float: left;
+}
+
 
 
 /*estilos componente Pdv y el comoponente CommentsPdv*/

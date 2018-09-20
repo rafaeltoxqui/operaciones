@@ -2383,20 +2383,27 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	data: function data() {
 		return {
 			pages: [], //paginado
 			lastPage: 1, //paginado
-			list: [], //paginado, listado
+			list: [], //paginado, listado de una pagina
 			pdvModel: '', //listado
 			modalTitle: '', //listado
+			modalStatus: '', //listado
 			selected: '', //listado
 			llave: '', //para recargar el sitio
 			onlyOnePage: [], //para regarcar el sitio
-			newComment: '' //para el comentario deafult o el que el usuario ponga
+			newComment: '', //para el comentario deafult o el que el usuario ponga
+			flag: '', //bandera que dice si es post o get
+			valueSearch: '' //valor a buscar
 		};
+	},
+	created: function created() {
+		this.$eventHub.$on('warn', this.search);
 	},
 
 	methods: {
@@ -2404,12 +2411,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		fillList: function fillList() {
 			var _this = this;
 
-			axios.get('/pdvs/pages').then(function (response) {
-				_this.list = response.data.data;
-				_this.lastPage = response.data.last_page;
-				_this.newComment = "state modification";
-				_this.createPages();
-			});
+			if (this.flag !== 'POST') {
+				axios.get('/pdvs/pages').then(function (response) {
+					_this.list = response.data.data;
+					_this.lastPage = response.data.last_page;
+					_this.newComment = "state modification";
+					_this.createPages();
+				});
+			} else {
+				axios.post('/pdvs/searchByStore', { search: this.valueSearch }).then(function (response) {
+					_this.list = response.data.data;
+					_this.lastPage = response.data.last_page;
+					_this.newComment = 'state modification';
+					_this.createPages();
+				});
+			}
 		},
 		createPages: function createPages() {
 			this.pages = [];
@@ -2426,12 +2442,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			if (index === '') {
 				index = 0;
 			}
-			axios.get('pdvs/pages?page=' + page.ubication).then(function (response) {
-				_this2.pages[index].class = "pageFocus";
-				_this2.llave = index;
-				_this2.onlyOnePage = page;
-				_this2.list = response.data.data;
-			});
+			if (this.flag !== 'POST') {
+				axios.get('pdvs/pages?page=' + page.ubication).then(function (response) {
+					_this2.pages[index].class = "pageFocus";
+					_this2.llave = index;
+					_this2.onlyOnePage = page;
+					_this2.list = response.data.data;
+				});
+			} else {
+				axios.post('/pdvs/searchByStore?page=' + page.ubication, { search: this.valueSearch }).then(function (response) {
+					_this2.pages[index].class = "pageFocus";
+					_this2.llave = index;
+					_this2.onlyOnePage = page;
+					_this2.list = response.data.data;
+				});
+			}
 		},
 
 		// Aqui comienzan metodos para listado 
@@ -2448,7 +2473,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			}
 			this.pdvModel = pdv.id;
 			this.modalTitle = pdv.PDV;
-			//console.log(this.pdvModel);
+			this.modalStatus = pdv.Estatus;
 			$('#exampleModal').modal('show');
 		},
 		updateStatusPDV: function updateStatusPDV() {
@@ -2467,11 +2492,63 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		onlyRefeshList: function onlyRefeshList() {
 			this.fillList();
 			this.clickpage(this.llave, this.onlyOnePage);
+		},
+		search: function search() {
+			//console.log("EXITO CON EL BUS");
+			var searchValue = $('#search').val();
+			if (searchValue != '') {
+				this.valueSearch = searchValue;
+				this.flag = 'POST';
+				$('#search').val('');
+				this.fillList();
+			} else {
+				this.flag = 'GET';
+				$('#search').val('');
+				this.fillList();
+			}
+			//this.clickpage(this.llave,this.onlyOnePage);
 		}
 	},
 	beforeMount: function beforeMount() {
 		//metodo uncial para llenar la lista y los paginados
 		this.fillList();
+	}
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/SearchComponent.vue":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+	data: function data() {
+		return {};
+	},
+
+	methods: {
+		warn: function warn() {
+			this.$eventHub.$emit('warn');
+		}
+		/*getFoundList() {
+  	var searchValue = $('#search').val();
+  	if(this.search != ''){
+  		axios.post('/pdvs/searchByStore',{search:searchValue}).then((response) => {
+  			console.log(response.data);
+  			axios.post('/pdvs/searchByStore?page=3',{search:searchValue}).then((response) => {
+  				console.log(response.data);
+  			});
+  		});
+  	}
+  },*/
+
 	}
 });
 
@@ -37709,7 +37786,7 @@ var render = function() {
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "modal-body" }, [
-                _c("p", [_vm._v("Estatus del Punto de Venta")]),
+                _c("p", [_vm._v("* Estatus Adquisicion de punto de venta: ")]),
                 _vm._v(" "),
                 _c(
                   "select",
@@ -37740,6 +37817,10 @@ var render = function() {
                     }
                   },
                   [
+                    _c("option", { attrs: { disabled: "", value: "" } }, [
+                      _vm._v(_vm._s(_vm.modalStatus))
+                    ]),
+                    _vm._v(" "),
                     _c("option", { attrs: { value: "1" } }, [
                       _vm._v("Autorizada")
                     ]),
@@ -37749,7 +37830,7 @@ var render = function() {
                     ])
                   ]
                 ),
-                _vm._v("\r\n\t\t\t\tComentario:\r\n\t\t\t\t"),
+                _vm._v("\r\n\t\t\t\t* Comentario: \r\n\t\t\t\t"),
                 _c("textarea", {
                   directives: [
                     {
@@ -37772,7 +37853,20 @@ var render = function() {
                   }
                 }),
                 _vm._v(" "),
-                _vm._m(1)
+                _c("h6", [
+                  _c(
+                    "span",
+                    { staticClass: "small" },
+                    [
+                      _c("center", [
+                        _vm._v(
+                          ' "state modification" is the default comment if you do not post a comment '
+                        )
+                      ])
+                    ],
+                    1
+                  )
+                ])
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "modal-footer" }, [
@@ -37841,18 +37935,6 @@ var staticRenderFns = [
         _c("th", { attrs: { scope: "col" } }, [_vm._v("Mas Apertura")])
       ])
     ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("h6", [
-      _c("span", { staticClass: "small" }, [
-        _vm._v(
-          ' "state modification" is the default comment if you do not post a comment'
-        )
-      ])
-    ])
   }
 ]
 render._withStripped = true
@@ -37887,7 +37969,7 @@ var render = function() {
           _c("div", { staticClass: "row" }, [
             _c("div", { staticClass: "col-xs-6 col-sm-6 col-md-6 col-lg-6" }, [
               _c("div", { staticClass: "form-group" }, [
-                _c("label", [_vm._v("*PDV: ")]),
+                _c("label", [_vm._v("* PDV: ")]),
                 _vm._v(" "),
                 _c("input", {
                   directives: [
@@ -37913,7 +37995,7 @@ var render = function() {
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "form-group" }, [
-                _c("label", [_vm._v("*Region: ")]),
+                _c("label", [_vm._v("* Region: ")]),
                 _vm._v(" "),
                 _c(
                   "select",
@@ -37963,7 +38045,7 @@ var render = function() {
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "form-group" }, [
-                _c("label", [_vm._v("*Subregion: ")]),
+                _c("label", [_vm._v("* Subregion: ")]),
                 _vm._v(" "),
                 _c(
                   "select",
@@ -38017,7 +38099,7 @@ var render = function() {
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "form-group" }, [
-                _c("label", [_vm._v("*Plaza: ")]),
+                _c("label", [_vm._v("* Plaza: ")]),
                 _vm._v(" "),
                 _c(
                   "select",
@@ -38067,7 +38149,7 @@ var render = function() {
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "form-group" }, [
-                _c("label", [_vm._v("*No. Q: ")]),
+                _c("label", [_vm._v("* No. Q: ")]),
                 _vm._v(" "),
                 _c("input", {
                   directives: [
@@ -38099,7 +38181,7 @@ var render = function() {
             _vm._v(" "),
             _c("div", { staticClass: "col-xs-6 col-sm-6 col-md-6 col-lg-6" }, [
               _c("div", { staticClass: "form-group" }, [
-                _c("label", [_vm._v("*Estatus Contrato: ")]),
+                _c("label", [_vm._v("* Estatus Contrato: ")]),
                 _vm._v(" "),
                 _c(
                   "select",
@@ -38153,7 +38235,7 @@ var render = function() {
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "form-group" }, [
-                _c("label", [_vm._v("*Estatus Adquisicion: ")]),
+                _c("label", [_vm._v("* Estatus Adquisicion: ")]),
                 _vm._v(" "),
                 _c(
                   "select",
@@ -38211,7 +38293,7 @@ var render = function() {
               _c("hr"),
               _vm._v(" "),
               _c("div", { staticClass: "form-group" }, [
-                _c("label", [_vm._v("*Comentario: ")]),
+                _c("label", [_vm._v("* Comentario: ")]),
                 _vm._v(" "),
                 _c("textarea", {
                   directives: [
@@ -38389,6 +38471,46 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-4fb499f2", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-6406c664\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/SearchComponent.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c(
+      "button",
+      {
+        staticClass: "btn btn-primary",
+        attrs: { type: "button", id: "btnBus" },
+        on: {
+          click: function($event) {
+            _vm.warn()
+          }
+        }
+      },
+      [
+        _c("i", {
+          staticClass: "fa fa-search",
+          staticStyle: { "font-size": "15px" }
+        })
+      ]
+    )
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-6406c664", module.exports)
   }
 }
 
@@ -49745,6 +49867,7 @@ module.exports = function(module) {
 __webpack_require__("./resources/assets/js/bootstrap.js");
 
 window.Vue = __webpack_require__("./node_modules/vue/dist/vue.common.js");
+Vue.prototype.$eventHub = new Vue();
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -49759,6 +49882,7 @@ Vue.component('pdv', __webpack_require__("./resources/assets/js/components/Pdv.v
 Vue.component('comment-get', __webpack_require__("./resources/assets/js/components/CommentsPdv.vue"));
 Vue.component('pdv-update', __webpack_require__("./resources/assets/js/components/PdvModalUpdate.vue"));
 Vue.component('pdv-pagination', __webpack_require__("./resources/assets/js/components/PdvTablePaginator.vue"));
+Vue.component('pdv-search', __webpack_require__("./resources/assets/js/components/SearchComponent.vue"));
 
 var app = new Vue({
   el: '#app'
@@ -50153,6 +50277,54 @@ if (false) {(function () {
     hotAPI.createRecord("data-v-2a2eb5de", Component.options)
   } else {
     hotAPI.reload("data-v-2a2eb5de", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/SearchComponent.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
+/* script */
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/SearchComponent.vue")
+/* template */
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-6406c664\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/SearchComponent.vue")
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/SearchComponent.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-6406c664", Component.options)
+  } else {
+    hotAPI.reload("data-v-6406c664", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
