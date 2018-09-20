@@ -21,12 +21,10 @@
 					<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4"><h5> *&nbsp;Estatus contrato: <span class="small" id="textstyle">{{pdv.FirmaContrato}} </span></h5></div>
 					<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4"><h5> *&nbsp;Estatus adquisicion: <span class="small" id="textstyle">{{pdv.Estatus}} </span></h5></div>
 				</div>
-				<hr class="my-4">
-				<!--<p>COMENTARIOS:</p>-->
-				<comment-get :id="pdvId"></comment-get>
 			</div>
-		</div>
-	</div>
+			<comment-get :id="pdvId"></comment-get>
+		</div><!-- TERMINA COLUMNA -->
+	</div><!-- TERMINA FILA(ROW) -->
 <!--Modal -->
 	<div class="modal fade bd-example-modal-lg" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" 	aria-hidden="true">
 	  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
@@ -70,6 +68,7 @@
 				});
 			},
 			pdvModalUpdate(){
+				this.$eventHub.$emit('refreshYourDate');
 				$('#exampleModalCenter').modal('show');
 			},
 			returnToPdvs(){

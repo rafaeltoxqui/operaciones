@@ -65,8 +65,8 @@
 	        		<option value="2">Traspazo</option>
 	        	</select>
 				* Comentario: 
-				<textarea class="form-control" v-model="newComment" v-bind:placeholder="newComment" rows="10"></textarea>
-				<h6><span class="small"><center> "The state was modified" is the default comment if you do not post a comment </center></span></h6>
+				<textarea class="form-control" v-model="newComment" v-bind:placeholder="newComment" rows="10" style="resize: none;"></textarea>
+				<h6><span class="small" id="alertComment"><center> "The state was modified" is the default comment if you do not post a comment </center></span></h6>
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-secondary" data-dismiss="modal" v-on:click="onlyRefeshList()">Close</button>

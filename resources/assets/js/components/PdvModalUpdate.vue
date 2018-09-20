@@ -9,13 +9,13 @@
 
 	  		<div class="form-group">
 	  			<label>* PDV: </label>
-	  			<input class="form-control" name="tienda" v-model="Pdv">
+	  			<input class="form-control" id="tienda" name="tienda" v-model="Pdv">
 	  		</div>
 
 	  		<div class="form-group">
 	  			<label>* Region: </label>
 	  			<select class="form-control" v-model="Region">
-	  				<option disabled value="">{{firstOpt.Region}}</option>
+	  				<option disabled value="">-{{firstOpt.Region}}</option>
 	  				<option v-for="region in regions" v-bind:value="region.id">
 	  					{{region.name}}
 	  				</option>
@@ -25,7 +25,7 @@
 	  		<div class="form-group">
 	  			<label>* Subregion: </label>
 	  			<select class="form-control" v-model="Subregion">
-	  				<option disabled value="">{{firstOpt.Subregion}}</option>
+	  				<option disabled value="">-{{firstOpt.Subregion}}</option>
 	  				<option v-for="subregion in subregions" v-bind:value="subregion.id">
 	  					{{subregion.name}}
 	  				</option>
@@ -35,7 +35,7 @@
 	  		<div class="form-group">
 	  			<label>* Plaza: </label>
 	  			<select class="form-control" v-model="Plaza">
-	  				<option disabled value="">{{firstOpt.Plaza}}</option>
+	  				<option disabled value="">-{{firstOpt.Plaza}}</option>
 	  				<option v-for="plaza in plazas" v-bind:value="plaza.id">
 	  					{{plaza.name}}
 	  				</option>
@@ -53,7 +53,7 @@
 	  		<div class="form-group">
 	  			<label>* Estatus Contrato: </label>
 	  			<select class="form-control" v-model="estatuscontrato">
-	  				<option disabled value="">{{firstOpt.FirmaContrato}}</option>
+	  				<option disabled value="">-{{firstOpt.FirmaContrato}}</option>
 	  				<option v-for="contrato in estauscontratofirmado" v-bind:value="contrato.id">
 	  					{{contrato.status}}
 	  				</option>
@@ -63,7 +63,7 @@
 	  		<div class="form-group">
 	  			<label>* Estatus Adquisicion: </label>
 	  			<select class="form-control" v-model="estatusadquisicion">
-	  				<option disabled value="">{{firstOpt.Estatus}}</option>
+	  				<option disabled value="">-{{firstOpt.Estatus}}</option>
 	  				<option v-for="adquisicion in estadquisicion" v-bind:value="adquisicion.id">
 	  					{{adquisicion.status}}
 	  				</option>
@@ -74,8 +74,8 @@
 	  		<hr>
 	  		<div class="form-group">
 	  			<label>* Comentario: </label>
-	  			<textarea class="form-control" id="Textarea1" rows="6" v-model.trim="comentario"></textarea>
-	  			<h6><span class="small">"THE PDV WAS MODIFIED" is the default comment if you do not post a comment.</span></h6>
+	  			<textarea class="form-control" id="Textarea1" rows="6" v-model.trim="comentario" style="resize: none;"></textarea>
+	  			<h6><span class="small" id="alertComment">"THE PDV WAS MODIFIED" is the default comment if you do not post a comment.</span></h6>
 	  		</div>
 
 	  	</div>
@@ -109,6 +109,9 @@
 				estadquisicion: [],
 			};
 		},
+		created(){
+			this.$eventHub.$on('refreshYourDate',this.getPdv);
+		},
 		mounted(){
 			this.fillFields();
 			this.getPdv();
@@ -124,6 +127,7 @@
 				this.comentario = 'THE PDV WAS MODIFIED';
 			},
 			fillFields(){
+				document.getElementById('tienda').setAttribute('autocomplete','off');
 				axios.get('/region/getregions').then((response) => {
 					this.regions = response.data;
 				});

@@ -20,7 +20,7 @@ class CommentController extends Controller
     }
 
     public function showJ(Request $request){
-    	$coments = Comment::where('id_pdv','=',$request->id)->get();
+    	$coments = Comment::where('id_pdv','=',$request->id)->orderBy('id', 'DESC')->take(5)->get();
     	return $coments;
     }
 }

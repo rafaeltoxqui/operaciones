@@ -1661,8 +1661,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	data: function data() {
@@ -1914,8 +1912,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	data: function data() {
@@ -1942,6 +1938,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			});
 		},
 		pdvModalUpdate: function pdvModalUpdate() {
+			this.$eventHub.$emit('refreshYourDate');
 			$('#exampleModalCenter').modal('show');
 		},
 		returnToPdvs: function returnToPdvs() {
@@ -2076,6 +2073,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			estadquisicion: []
 		};
 	},
+	created: function created() {
+		this.$eventHub.$on('refreshYourDate', this.getPdv);
+	},
 	mounted: function mounted() {
 		this.fillFields();
 		this.getPdv();
@@ -2096,6 +2096,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		fillFields: function fillFields() {
 			var _this2 = this;
 
+			document.getElementById('tienda').setAttribute('autocomplete', 'off');
 			axios.get('/region/getregions').then(function (response) {
 				_this2.regions = response.data;
 			});
@@ -37838,6 +37839,7 @@ var render = function() {
                     }
                   ],
                   staticClass: "form-control",
+                  staticStyle: { resize: "none" },
                   attrs: { placeholder: _vm.newComment, rows: "10" },
                   domProps: { value: _vm.newComment },
                   on: {
@@ -37853,7 +37855,7 @@ var render = function() {
                 _c("h6", [
                   _c(
                     "span",
-                    { staticClass: "small" },
+                    { staticClass: "small", attrs: { id: "alertComment" } },
                     [
                       _c("center", [
                         _vm._v(
@@ -37978,7 +37980,7 @@ var render = function() {
                     }
                   ],
                   staticClass: "form-control",
-                  attrs: { name: "tienda" },
+                  attrs: { id: "tienda", name: "tienda" },
                   domProps: { value: _vm.Pdv },
                   on: {
                     input: function($event) {
@@ -38024,7 +38026,7 @@ var render = function() {
                   },
                   [
                     _c("option", { attrs: { disabled: "", value: "" } }, [
-                      _vm._v(_vm._s(_vm.firstOpt.Region))
+                      _vm._v("-" + _vm._s(_vm.firstOpt.Region))
                     ]),
                     _vm._v(" "),
                     _vm._l(_vm.regions, function(region) {
@@ -38074,7 +38076,7 @@ var render = function() {
                   },
                   [
                     _c("option", { attrs: { disabled: "", value: "" } }, [
-                      _vm._v(_vm._s(_vm.firstOpt.Subregion))
+                      _vm._v("-" + _vm._s(_vm.firstOpt.Subregion))
                     ]),
                     _vm._v(" "),
                     _vm._l(_vm.subregions, function(subregion) {
@@ -38128,7 +38130,7 @@ var render = function() {
                   },
                   [
                     _c("option", { attrs: { disabled: "", value: "" } }, [
-                      _vm._v(_vm._s(_vm.firstOpt.Plaza))
+                      _vm._v("-" + _vm._s(_vm.firstOpt.Plaza))
                     ]),
                     _vm._v(" "),
                     _vm._l(_vm.plazas, function(plaza) {
@@ -38210,7 +38212,7 @@ var render = function() {
                   },
                   [
                     _c("option", { attrs: { disabled: "", value: "" } }, [
-                      _vm._v(_vm._s(_vm.firstOpt.FirmaContrato))
+                      _vm._v("-" + _vm._s(_vm.firstOpt.FirmaContrato))
                     ]),
                     _vm._v(" "),
                     _vm._l(_vm.estauscontratofirmado, function(contrato) {
@@ -38264,7 +38266,7 @@ var render = function() {
                   },
                   [
                     _c("option", { attrs: { disabled: "", value: "" } }, [
-                      _vm._v(_vm._s(_vm.firstOpt.Estatus))
+                      _vm._v("-" + _vm._s(_vm.firstOpt.Estatus))
                     ]),
                     _vm._v(" "),
                     _vm._l(_vm.estadquisicion, function(adquisicion) {
@@ -38303,6 +38305,7 @@ var render = function() {
                     }
                   ],
                   staticClass: "form-control",
+                  staticStyle: { resize: "none" },
                   attrs: { id: "Textarea1", rows: "6" },
                   domProps: { value: _vm.comentario },
                   on: {
@@ -38358,7 +38361,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("h6", [
-      _c("span", { staticClass: "small" }, [
+      _c("span", { staticClass: "small", attrs: { id: "alertComment" } }, [
         _vm._v(
           '"THE PDV WAS MODIFIED" is the default comment if you do not post a comment.'
         )
@@ -38384,52 +38387,15 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    [
-      _c("div", { staticClass: "row" }, [
-        _c("div", { staticClass: "col-xs-1 col-sm-1 col-md-1 col-lg-1" }),
-        _vm._v(" "),
-        _c("div", { staticClass: "col-xs-10 col-sm-10 col-md-10 col-lg-10" }, [
-          _c(
-            "fieldset",
-            { staticClass: "fieldComentarios" },
-            [
-              _vm._m(0),
-              _vm._v(" "),
-              _vm._l(_vm.comentarios, function(comentario) {
-                return _c("div", { staticClass: "alert alert-info" }, [
-                  _c("h6", [
-                    _c("i", { staticClass: "fa fa-comment" }),
-                    _vm._v(": " + _vm._s(comentario.comment) + " "),
-                    _c(
-                      "span",
-                      { staticClass: "small", attrs: { id: "FYHC" } },
-                      [_vm._v(" created: " + _vm._s(comentario.created_at))]
-                    )
-                  ])
-                ])
-              })
-            ],
-            2
-          )
-        ])
-      ]),
-      _vm._v(" "),
+  return _c("div", [
+    _c("div", { staticClass: "row" }, [
       _c(
         "div",
         {
-          staticClass: "alert alert-warning",
-          attrs: { id: "ocultoMenssage", role: "alert" }
+          staticClass: "col-xs-4 col-sm-4 col-md-4 col-lg-4",
+          attrs: { id: "addCommentPdv" }
         },
-        [_c("center", [_vm._v("WARNING: ¡The comment cannot be empty!")])],
-        1
-      ),
-      _vm._v(" "),
-      _c("br"),
-      _vm._v(" "),
-      _c("center", [
-        _c("div", { staticClass: "col-xs-7 col-sm-7 col-md-7 col-lg-7" }, [
+        [
           _c("textarea", {
             directives: [
               {
@@ -38439,8 +38405,8 @@ var render = function() {
                 expression: "newComment"
               }
             ],
-            staticClass: "form-control btnComment",
-            attrs: { rows: "2" },
+            staticClass: "form-control textComment",
+            attrs: { rows: "10" },
             domProps: { value: _vm.newComment },
             on: {
               input: function($event) {
@@ -38451,6 +38417,7 @@ var render = function() {
               }
             }
           }),
+          _c("br"),
           _vm._v(" "),
           _c(
             "button",
@@ -38465,11 +38432,45 @@ var render = function() {
             },
             [_vm._v("ADD COMMENT")]
           )
-        ])
+        ]
+      ),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-xs-8 col-sm-8 col-md-8 col-lg-8" }, [
+        _c(
+          "fieldset",
+          { staticClass: "fieldComentarios" },
+          [
+            _vm._m(0),
+            _vm._v(" "),
+            _vm._l(_vm.comentarios, function(comentario) {
+              return _c("div", { staticClass: "alert alert-info" }, [
+                _c("h6", [
+                  _c("i", { staticClass: "fa fa-comment" }),
+                  _vm._v(": " + _vm._s(comentario.comment) + " "),
+                  _c("span", { staticClass: "small", attrs: { id: "FYHC" } }, [
+                    _vm._v(" created: " + _vm._s(comentario.created_at))
+                  ])
+                ])
+              ])
+            })
+          ],
+          2
+        )
       ])
-    ],
-    1
-  )
+    ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "alert alert-warning",
+        attrs: { id: "ocultoMenssage", role: "alert" }
+      },
+      [_c("center", [_vm._v("WARNING: ¡The comment cannot be empty!")])],
+      1
+    ),
+    _vm._v(" "),
+    _c("br")
+  ])
 }
 var staticRenderFns = [
   function() {
@@ -38589,28 +38590,28 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", [
     _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-md-12 col-lg-12" }, [
-        _c("div", { staticClass: "returnToPdvs" }, [
-          _c("button", {
-            staticClass: "btn btn-default btnToPdvs",
-            attrs: {
-              type: "button",
-              "data-toggle": "tooltip",
-              "data-placement": "bottom",
-              title: "back to pdvs list"
-            },
-            on: {
-              click: function($event) {
-                _vm.returnToPdvs()
+      _c(
+        "div",
+        { staticClass: "col-md-12 col-lg-12" },
+        [
+          _c("div", { staticClass: "returnToPdvs" }, [
+            _c("button", {
+              staticClass: "btn btn-default btnToPdvs",
+              attrs: {
+                type: "button",
+                "data-toggle": "tooltip",
+                "data-placement": "bottom",
+                title: "back to pdvs list"
+              },
+              on: {
+                click: function($event) {
+                  _vm.returnToPdvs()
+                }
               }
-            }
-          })
-        ]),
-        _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "jumbotron" },
-          [
+            })
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "jumbotron" }, [
             _c(
               "div",
               {
@@ -38751,15 +38752,13 @@ var render = function() {
                   ])
                 ]
               )
-            ]),
-            _vm._v(" "),
-            _c("hr", { staticClass: "my-4" }),
-            _vm._v(" "),
-            _c("comment-get", { attrs: { id: _vm.pdvId } })
-          ],
-          1
-        )
-      ])
+            ])
+          ]),
+          _vm._v(" "),
+          _c("comment-get", { attrs: { id: _vm.pdvId } })
+        ],
+        1
+      )
     ]),
     _vm._v(" "),
     _c(

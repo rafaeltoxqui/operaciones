@@ -1,8 +1,12 @@
 <template>
 <div>
 	<div class="row">
-		<div class="col-xs-1 col-sm-1 col-md-1 col-lg-1"></div>
-		<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+		<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" id="addCommentPdv">
+			<textarea class="form-control textComment" rows="10" v-model="newComment"></textarea><br>
+			<button type="button" class="btn btn-primary btn-sm" id="btnComment" v-on:click="addNewComment()">ADD COMMENT</button>
+		</div>
+
+		<div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
 			<fieldset class="fieldComentarios">
 				<legend class="legenFielComentarios">
 					<h5><span class="small"><strong>&nbsp;&nbsp;COMENTARIOS&nbsp;&nbsp;</strong></span></h5>
@@ -15,12 +19,6 @@
 	</div>
 	<div class="alert alert-warning" id="ocultoMenssage" role="alert"><center>WARNING: ¡The comment cannot be empty!</center></div>
 	<br>
-	<center>
-		<div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
-			<textarea class="form-control btnComment" rows="2" v-model="newComment"></textarea>
-			<button type="button" class="btn btn-primary btn-sm" id="btnComment" v-on:click="addNewComment()">ADD COMMENT</button>
-		</div>
-	</center>
 </div>
 </template>
 <script>
