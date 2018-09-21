@@ -11,4 +11,14 @@ class PdvStatusAdquisicionController extends Controller
     	$listStatusAdquisition = PdvStatus::get(['id','status']);
     	return $listStatusAdquisition;
     }
+
+    public function getAllStatusFilterJ(){
+    	$listStatusAdquisition = PdvStatus::get(['id','status']);
+    	$returnListStatusAdquisition = array();
+    	foreach($listStatusAdquisition as $statusAdquisition){
+    		$arrayTmp = array('id' => $statusAdquisition->id, 'name' => $statusAdquisition->status);
+    		array_push($returnListStatusAdquisition, $arrayTmp);
+    	}
+    	return json_encode($returnListStatusAdquisition);
+    }
 }

@@ -1957,6 +1957,76 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/PdvFilterListComponent.vue":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+	data: function data() {
+		return {
+			valorCriterio: '',
+			valueSearch: '',
+			optionsSearch: [],
+			criterios: [{ text: 'Region' }, { text: 'Subregion' }, { text: 'Estatus Adquisicion' }, { text: 'Estatus Contrato' }]
+		};
+	},
+
+	methods: {
+		operationOfSelected: function operationOfSelected() {
+			var _this = this;
+
+			var url = '';
+			if (this.valorCriterio != '') {
+				if (this.valorCriterio == 'Region') {
+					url = '/region/getregions';
+				}
+				if (this.valorCriterio == 'Subregion') {
+					url = '/subregion/getsubregions';
+				}
+				if (this.valorCriterio == 'Estatus Adquisicion') {
+					url = '/status/getStatusFilter';
+				}
+				if (this.valorCriterio == 'Estatus Contrato') {
+					url = '/statucontrato/getstatuscontratofilter';
+				}
+				axios.get(url).then(function (response) {
+					_this.optionsSearch = response.data;
+				});
+
+				$('#btn-filter').fadeIn("slow");
+			}
+		},
+		getFilteredList: function getFilteredList() {
+			var filtros = [this.valorCriterio, this.valueSearch];
+			this.$eventHub.$emit('filtersToSearch', filtros);
+			/*if(this.valueSearch != ''){
+   	axios.post('/pdvs/searchByFilter',{table:this.valorCriterio, value:this.valueSearch}).then((response) => {
+   		console.log(response.data.data);
+   	});
+   }*/
+		}
+	}
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/PdvModalUpdate.vue":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -2397,31 +2467,38 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			onlyOnePage: [], //para regarcar el sitio
 			newComment: '', //para el comentario deafult o el que el usuario ponga
 			flag: '', //bandera que dice si es post o get
-			valueSearch: '' //valor a buscar
+			valueSearch: '', //valor a buscar
+			filterList: []
 		};
 	},
 	created: function created() {
+		var _this = this;
+
 		this.$eventHub.$on('warn', this.search);
+		this.$eventHub.$on('filtersToSearch', function (list) {
+			_this.filterList = list;
+			_this.filters();
+		});
 	},
 
 	methods: {
 		//Metodos para paginado
 		fillList: function fillList() {
-			var _this = this;
+			var _this2 = this;
 
 			if (this.flag !== 'POST') {
 				axios.get('/pdvs/pages').then(function (response) {
-					_this.list = response.data.data;
-					_this.lastPage = response.data.last_page;
-					_this.newComment = "The state was modified";
-					_this.createPages();
+					_this2.list = response.data.data;
+					_this2.lastPage = response.data.last_page;
+					_this2.newComment = "The state was modified";
+					_this2.createPages();
 				});
 			} else {
 				axios.post('/pdvs/searchByStore', { search: this.valueSearch }).then(function (response) {
-					_this.list = response.data.data;
-					_this.lastPage = response.data.last_page;
-					_this.newComment = 'The state was modified';
-					_this.createPages();
+					_this2.list = response.data.data;
+					_this2.lastPage = response.data.last_page;
+					_this2.newComment = 'The state was modified';
+					_this2.createPages();
 				});
 			}
 		},
@@ -2432,7 +2509,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			}
 		},
 		clickpage: function clickpage(index, page) {
-			var _this2 = this;
+			var _this3 = this;
 
 			this.pages.filter(function (elem) {
 				elem.class = "";
@@ -2442,17 +2519,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			}
 			if (this.flag !== 'POST') {
 				axios.get('pdvs/pages?page=' + page.ubication).then(function (response) {
-					_this2.pages[index].class = "pageFocus";
-					_this2.llave = index;
-					_this2.onlyOnePage = page;
-					_this2.list = response.data.data;
+					_this3.pages[index].class = "pageFocus";
+					_this3.llave = index;
+					_this3.onlyOnePage = page;
+					_this3.list = response.data.data;
 				});
 			} else {
 				axios.post('/pdvs/searchByStore?page=' + page.ubication, { search: this.valueSearch }).then(function (response) {
-					_this2.pages[index].class = "pageFocus";
-					_this2.llave = index;
-					_this2.onlyOnePage = page;
-					_this2.list = response.data.data;
+					_this3.pages[index].class = "pageFocus";
+					_this3.llave = index;
+					_this3.onlyOnePage = page;
+					_this3.list = response.data.data;
 				});
 			}
 		},
@@ -2505,6 +2582,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				this.fillList();
 			}
 			//this.clickpage(this.llave,this.onlyOnePage);
+		},
+		filters: function filters() {
+			console.log(this.filterList);
 		}
 	},
 	beforeMount: function beforeMount() {
@@ -37639,68 +37719,72 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { attrs: { id: "op-dashboard" } }, [
-    _c("table", { staticClass: "table table-hover tabletextalign" }, [
-      _vm._m(0),
-      _vm._v(" "),
-      _c(
-        "tbody",
-        _vm._l(_vm.list, function(row, index) {
-          return _c(
-            "tr",
-            { key: row.id, attrs: { row: row } },
-            [
-              _vm._l(row, function(item, key) {
-                return _c("td", [
-                  key === "PDV"
-                    ? _c("span", [
-                        _c(
-                          "a",
-                          {
-                            staticClass: "anchor-pdv",
-                            attrs: { href: "#" },
-                            on: {
-                              click: function($event) {
-                                _vm.ir(row)
+    _c(
+      "table",
+      { staticClass: "table-responsive table table-hover tabletextalign" },
+      [
+        _vm._m(0),
+        _vm._v(" "),
+        _c(
+          "tbody",
+          _vm._l(_vm.list, function(row, index) {
+            return _c(
+              "tr",
+              { key: row.id, attrs: { row: row } },
+              [
+                _vm._l(row, function(item, key) {
+                  return _c("td", [
+                    key === "PDV"
+                      ? _c("span", [
+                          _c(
+                            "a",
+                            {
+                              staticClass: "anchor-pdv",
+                              attrs: { href: "#" },
+                              on: {
+                                click: function($event) {
+                                  _vm.ir(row)
+                                }
                               }
-                            }
-                          },
-                          [_vm._v(_vm._s(item))]
-                        )
-                      ])
-                    : _c("span", [_vm._v(_vm._s(item))])
-                ])
-              }),
-              _vm._v(" "),
-              _c("td", [_vm._v("Expert Cell")]),
-              _vm._v(" "),
-              _c("td", [_vm._v("2")]),
-              _vm._v(" "),
-              _c("td", [_vm._v("3")]),
-              _vm._v(" "),
-              _c("td", [_vm._v("Agosto")]),
-              _vm._v(" "),
-              _c(
-                "td",
-                {
-                  on: {
-                    click: function($event) {
-                      _vm.pdvModal(row)
+                            },
+                            [_vm._v(_vm._s(item))]
+                          )
+                        ])
+                      : _c("span", [_vm._v(_vm._s(item))])
+                  ])
+                }),
+                _vm._v(" "),
+                _c("td", [_vm._v("Expert Cell")]),
+                _vm._v(" "),
+                _c("td", [_vm._v("2")]),
+                _vm._v(" "),
+                _c("td", [_vm._v("3")]),
+                _vm._v(" "),
+                _c("td", [_vm._v("Agosto")]),
+                _vm._v(" "),
+                _c(
+                  "td",
+                  {
+                    on: {
+                      click: function($event) {
+                        _vm.pdvModal(row)
+                      }
                     }
-                  }
-                },
-                [
-                  _c("i", {
-                    staticClass: "fa fa-pencil",
-                    attrs: { id: "pencil" }
-                  })
-                ]
-              )
-            ],
-            2
-          )
-        })
-      )
-    ]),
+                  },
+                  [
+                    _c("i", {
+                      staticClass: "fa fa-pencil",
+                      attrs: { id: "pencil" }
+                    })
+                  ]
+                )
+              ],
+              2
+            )
+          })
+        )
+      ]
+    ),
     _vm._v(" "),
     _c(
       "ul",
@@ -37931,7 +38015,7 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", { attrs: { scope: "col" } }, [_vm._v("No. Q")]),
         _vm._v(" "),
-        _c("th", { attrs: { scope: "col" } }, [_vm._v("Mas Apertura")])
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Mes Apertura")])
       ])
     ])
   }
@@ -37942,6 +38026,114 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-2a2eb5de", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-4b00357c\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/PdvFilterListComponent.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "row" }, [
+    _c(
+      "select",
+      {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.valorCriterio,
+            expression: "valorCriterio"
+          }
+        ],
+        staticClass: "form-control",
+        on: {
+          change: [
+            function($event) {
+              var $$selectedVal = Array.prototype.filter
+                .call($event.target.options, function(o) {
+                  return o.selected
+                })
+                .map(function(o) {
+                  var val = "_value" in o ? o._value : o.value
+                  return val
+                })
+              _vm.valorCriterio = $event.target.multiple
+                ? $$selectedVal
+                : $$selectedVal[0]
+            },
+            _vm.operationOfSelected
+          ]
+        }
+      },
+      _vm._l(_vm.criterios, function(criterio) {
+        return _c("option", { domProps: { value: criterio.text } }, [
+          _vm._v("\r\n\t\t" + _vm._s(criterio.text) + "\r\n\t\t")
+        ])
+      })
+    ),
+    _vm._v(" "),
+    _c(
+      "select",
+      {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.valueSearch,
+            expression: "valueSearch"
+          }
+        ],
+        staticClass: "form-control",
+        on: {
+          change: function($event) {
+            var $$selectedVal = Array.prototype.filter
+              .call($event.target.options, function(o) {
+                return o.selected
+              })
+              .map(function(o) {
+                var val = "_value" in o ? o._value : o.value
+                return val
+              })
+            _vm.valueSearch = $event.target.multiple
+              ? $$selectedVal
+              : $$selectedVal[0]
+          }
+        }
+      },
+      _vm._l(_vm.optionsSearch, function(option) {
+        return _c("option", { domProps: { value: option.name } }, [
+          _vm._v("\r\n\t\t\t" + _vm._s(option.name) + "\r\n\t\t")
+        ])
+      })
+    ),
+    _vm._v(" "),
+    _c(
+      "button",
+      {
+        staticClass: "btn btn-primary",
+        attrs: { id: "btn-filter" },
+        on: {
+          click: function($event) {
+            _vm.getFilteredList()
+          }
+        }
+      },
+      [_c("i", { staticClass: "fa fa-filter" })]
+    )
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-4b00357c", module.exports)
   }
 }
 
@@ -38388,6 +38580,16 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
+    _c(
+      "div",
+      {
+        staticClass: "alert alert-warning",
+        attrs: { id: "ocultoMenssage", role: "alert" }
+      },
+      [_c("center", [_vm._v("WARNING: ¡The comment cannot be empty!")])],
+      1
+    ),
+    _vm._v(" "),
     _c("div", { staticClass: "row" }, [
       _c(
         "div",
@@ -38458,16 +38660,6 @@ var render = function() {
         )
       ])
     ]),
-    _vm._v(" "),
-    _c(
-      "div",
-      {
-        staticClass: "alert alert-warning",
-        attrs: { id: "ocultoMenssage", role: "alert" }
-      },
-      [_c("center", [_vm._v("WARNING: ¡The comment cannot be empty!")])],
-      1
-    ),
     _vm._v(" "),
     _c("br")
   ])
@@ -49900,6 +50092,7 @@ Vue.component('comment-get', __webpack_require__("./resources/assets/js/componen
 Vue.component('pdv-update', __webpack_require__("./resources/assets/js/components/PdvModalUpdate.vue"));
 Vue.component('pdv-pagination', __webpack_require__("./resources/assets/js/components/PdvTablePaginator.vue"));
 Vue.component('pdv-search', __webpack_require__("./resources/assets/js/components/SearchComponent.vue"));
+Vue.component('pdvs-filter', __webpack_require__("./resources/assets/js/components/PdvFilterListComponent.vue"));
 
 var app = new Vue({
   el: '#app'
@@ -50150,6 +50343,54 @@ if (false) {(function () {
     hotAPI.createRecord("data-v-769336ca", Component.options)
   } else {
     hotAPI.reload("data-v-769336ca", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/PdvFilterListComponent.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
+/* script */
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/PdvFilterListComponent.vue")
+/* template */
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-4b00357c\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/PdvFilterListComponent.vue")
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/PdvFilterListComponent.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-4b00357c", Component.options)
+  } else {
+    hotAPI.reload("data-v-4b00357c", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true

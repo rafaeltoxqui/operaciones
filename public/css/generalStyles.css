@@ -26,6 +26,8 @@
 }
 
 
+/*estilos para el filtro de busqueda*/
+
 
 /*estilos componente Pdv y el comoponente CommentsPdv*/
 .jumbotron{
@@ -46,7 +48,7 @@
 	transform: scale(1.5);
 	cursor: pointer;
 }
-#ocultoMenssage{
+#ocultoMenssage, #btn-filter{/*·btn-filter es para el boton del filtro de busqueda*/
 	display: none;
 }
 #btnComment{

@@ -1,6 +1,6 @@
 <template>
 <div id="op-dashboard">
-	<table class="table table-hover tabletextalign">
+	<table class="table-responsive table table-hover tabletextalign">
 		<thead>
 			<tr>
 				<th scope="col">ID</th>
@@ -13,7 +13,7 @@
 				<th scope="col">PDV Sugerido Por</th>
 				<th scope="col">Estimado de Apertura</th>
 				<th scope="col">No. Q</th>
-				<th scope="col">Mas Apertura</th>
+				<th scope="col">Mes Apertura</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -95,10 +95,15 @@
 				newComment: '',//para el comentario deafult o el que el usuario ponga
 				flag:'',//bandera que dice si es post o get
 				valueSearch: '', //valor a buscar
+				filterList: [],
 			};
 		},
 		created(){
 			this.$eventHub.$on('warn', this.search);
+			this.$eventHub.$on('filtersToSearch', list => {
+				this.filterList = list;
+				this.filters();
+			});
 		},
 		methods:{//Metodos para paginado
 			fillList(){
@@ -196,6 +201,9 @@
 					this.fillList();
 				}
 				//this.clickpage(this.llave,this.onlyOnePage);
+			},
+			filters(){
+				console.log(this.filterList);
 			}
 		},
 		beforeMount: function(){//metodo uncial para llenar la lista y los paginados

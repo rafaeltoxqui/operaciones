@@ -11,4 +11,14 @@ class PdvStatusContratoController extends Controller
     	$listStatusContrato = StatusContrato::get(['id','status']);
     	return $listStatusContrato;
     }
+
+    public function getAllStatusContratoFilterJ(){
+    	$listStatusContrato = StatusContrato::get(['id','status']);
+    	$returnListStatusContrato = array();
+    	foreach($listStatusContrato as $StatusContrato){
+    		$arrayTmp = array('id' => $StatusContrato->id, 'name' => $StatusContrato->status);
+    		array_push($returnListStatusContrato, $arrayTmp);
+    	}
+    	return json_encode($returnListStatusContrato);
+    }
 }

@@ -86,7 +86,7 @@ class PuntoVentaController extends Controller
     }
 
 
-/*METODOS PARA LAS BUSQUEDAS */
+/*METODOS PARA LAS BUSQUEDAS y EL FILTRO DE BUSQUEDA */
     public function searchByStoreNameJ(Request $request){
         $returnValue = NULL;
         if($request->search != ''){
@@ -110,9 +110,47 @@ class PuntoVentaController extends Controller
             $returnValue = json_encode(["mensaje"=>"Criterio De Busqueda Vacio"]);
         }
         return $returnValue;
+    }//Termina searchByStoreNsmeJ(Request $request)
+
+    public function searchByFilteredJ(Request $request){
+        $returnValue = NULL;
+        if($request->table != '' && $request->value != ''){
+            $queryWhereSearch = '';
+            if($request->table == 'Region'){
+                $queryWhereSearch = 'regions.name';
+            }
+            if($request->table == 'Subregion'){
+                $queryWhereSearch = 'subregions.name';
+            }
+            if($request->table == 'Estatus Adquisicion'){
+                $queryWhereSearch = 'pdv_status_adquisicions.status';
+            }
+            if($request->table == 'Estatus Contrato'){
+                $queryWhereSearch = 'pdv_status_contratos.status';
+            }
+            $foundList = \DB::table('pdvs')
+            ->select('pdvs.id as id','tiendas.name as PDV','regions.name as Region','subregions.name as Subregion','plazas.name as Plaza','pdv_status_adquisicions.status as Estatus','pdv_status_contratos.status as FirmaContrato')
+            ->join('tiendas', 'pdvs.id_tienda', '=', 'tiendas.id')
+            ->join('regions', 'pdvs.id_region', '=', 'regions.id')
+            ->join('subregions','pdvs.id_subregion', '=', 'subregions.id')
+            ->join('plazas','pdvs.id_plaza', '=', 'plazas.id')
+            ->join('pdv_status_adquisicions','pdvs.id_pdv_status_adquisicion', '=', 'pdv_status_adquisicions.id')
+            ->join('pdv_status_contratos', 'pdvs.id_pdv_status_contrato', '=', 'pdv_status_contratos.id')
+            ->where($queryWhereSearch, '=', "{$request->value}")
+            ->OrderBy('pdvs.id')
+            ->paginate(7);
+            if(!empty($foundList)){
+                $returnValue = $foundList;
+            }else{
+                $returnValue = json_encode(['mensaje' => 'Ningun Registro Encontrado']);
+            }
+        }else{
+            $returnValue = json_encode(["mensaje" => "Criterio de Busqueda Vacio"]);
+        }
+        return $returnValue;
     }
 
 
 
 
-}
+}//TERMINA CLASE

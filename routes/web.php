@@ -27,11 +27,14 @@ Route::get('/pdv/getpdv/{id}', 'PuntoVentaController@getPdvJ')->name('pdv.getpdv
 Route::get('/pdvs/pages', 'PuntoVentaController@getAllPdvPagesJ')->name('pdv.pages');
 //metodos para las busquedas
 Route::post('/pdvs/searchByStore', 'PuntoVentaController@searchByStoreNameJ')->name('pdv.searchbystore');
+Route::post('/pdvs/searchByFilter', 'PuntoVentaController@searchByFilteredJ')->name('pdv.searchbyfilter');
 //////
 Route::post('/comment', 'CommentController@create')->name('comment.create');
 Route::get('/comment/getComents/{id}', 'CommentController@showJ')->name('comment.show');
 Route::get('/status/getStatus', 'PdvStatusAdquisicionController@getAllStatusJ')->name('status.getstatus');
+Route::get('/status/getStatusFilter', 'PdvStatusAdquisicionController@getAllStatusFilterJ')->name('status.getstatusfilter');
 Route::get('/statuscontrato/getstatuscontrato', 'PdvStatusContratoController@getAllStatusContratoJ')->name('statucontrato.getstatuscontrato');
+Route::get('/statucontrato/getstatuscontratofilter', 'PdvStatusContratoController@getAllStatusContratoFilterJ')->name('statucontrato.getstatuscontratofilter');
 Route::get('/plaza/getplazas', 'PlazaController@getAllPlazasJ')->name('plaza.getplazas');
 Route::get('/region/getregions', 'RegionController@getAllRegionsJ')->name('region.getregions');
 Route::get('/subregion/getsubregions', 'SubregionController@getAllSubregionsJ')->name('subregion.getubregions');

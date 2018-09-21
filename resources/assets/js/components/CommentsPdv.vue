@@ -1,5 +1,6 @@
 <template>
 <div>
+	<div class="alert alert-warning" id="ocultoMenssage" role="alert"><center>WARNING: ¡The comment cannot be empty!</center></div>
 	<div class="row">
 		<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" id="addCommentPdv">
 			<textarea class="form-control textComment" rows="10" v-model="newComment"></textarea><br>
@@ -17,7 +18,6 @@
 			</fieldset>
 		</div>
 	</div>
-	<div class="alert alert-warning" id="ocultoMenssage" role="alert"><center>WARNING: ¡The comment cannot be empty!</center></div>
 	<br>
 </div>
 </template>

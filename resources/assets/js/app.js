@@ -24,6 +24,7 @@ Vue.component('comment-get', require('./components/CommentsPdv.vue'));
 Vue.component('pdv-update', require('./components/PdvModalUpdate.vue'));
 Vue.component('pdv-pagination', require('./components/PdvTablePaginator.vue'));
 Vue.component('pdv-search', require('./components/SearchComponent.vue'));
+Vue.component('pdvs-filter', require('./components/PdvFilterListComponent.vue'));
 
 const app = new Vue({
     el: '#app'
