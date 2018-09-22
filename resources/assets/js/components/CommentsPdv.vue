@@ -3,7 +3,8 @@
 	<div class="alert alert-warning" id="ocultoMenssage" role="alert"><center>WARNING: ¡The comment cannot be empty!</center></div>
 	<div class="row">
 		<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" id="addCommentPdv">
-			<textarea class="form-control textComment" rows="10" v-model="newComment"></textarea><br>
+			<textarea class="form-control textComment" rows="10" v-model="newComment" @keyup="countdown()"></textarea>
+			<center><h6><span class="small">Max 250 characters. Remaining: {{ numCaracteres }} </span></h6></center><br>
 			<button type="button" class="btn btn-primary btn-sm" id="btnComment" v-on:click="addNewComment()">ADD COMMENT</button>
 		</div>
 
@@ -27,6 +28,8 @@
 			return {
 				comentarios : [],
 				newComment: '',
+				maxCount: 250,
+				numCaracteres: 250,
 			};
 		},
 		props:{
@@ -65,6 +68,9 @@
 				this.newComment = '';
 				this.getCommentList();
 			},	
+			countdown(){
+				this.numCaracteres = this.maxCount - this.newComment.length;
+			},
 		},
 	}
 </script>

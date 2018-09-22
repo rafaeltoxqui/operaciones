@@ -27,6 +27,10 @@
 
 
 /*estilos para el filtro de busqueda*/
+#filterPosition, #btn-filter{
+	width: 100%;
+	height: 54%;
+}
 
 
 /*estilos componente Pdv y el comoponente CommentsPdv*/

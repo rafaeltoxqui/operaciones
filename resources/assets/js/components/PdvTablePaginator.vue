@@ -93,7 +93,7 @@
 				llave:'',//para recargar el sitio
 				onlyOnePage:[], //para regarcar el sitio
 				newComment: '',//para el comentario deafult o el que el usuario ponga
-				flag:'',//bandera que dice si es post o get
+				flag:'GET',//bandera que dice si es post o get
 				valueSearch: '', //valor a buscar
 				filterList: [],
 			};
@@ -107,15 +107,23 @@
 		},
 		methods:{//Metodos para paginado
 			fillList(){
-				if(this.flag !== 'POST'){
+				if(this.flag == 'GET'){
 					axios.get('/pdvs/pages').then((response) => {
 						this.list = response.data.data;
 						this.lastPage = response.data.last_page;
 						this.newComment = "The state was modified";
 						this.createPages();
 					});
-				}else{
+				}else if(this.flag == 'POST'){
 					axios.post('/pdvs/searchByStore',{search:this.valueSearch}).then((response) => {
+						this.list = response.data.data;
+						this.lastPage = response.data.last_page;
+						this.newComment = 'The state was modified';
+						this.createPages();
+					});
+				}else{
+					axios.post('/pdvs/searchByFilter',{table:this.filterList[0], value:this.filterList[1]}).then((response) => {
+						//console.log(response.data);
 						this.list = response.data.data;
 						this.lastPage = response.data.last_page;
 						this.newComment = 'The state was modified';
@@ -136,15 +144,23 @@
 				if(index === ''){
 					index = 0;
 				}
-				if(this.flag !== 'POST'){
+				if(this.flag == 'GET'){
 					axios.get('pdvs/pages?page='+page.ubication).then((response) => {
 						this.pages[index].class = "pageFocus";
 						this.llave = index;
 						this.onlyOnePage = page;
 						this.list = response.data.data;
 					});
-				}else{
+				}else if(this.flag == 'POST'){
 					axios.post('/pdvs/searchByStore?page='+page.ubication,{search:this.valueSearch}).then((response) => {
+						this.pages[index].class = "pageFocus";
+						this.llave = index;
+						this.onlyOnePage = page;
+						this.list = response.data.data;
+					});
+				}else{
+					axios.post('/pdvs/searchByFilter?page='+page.ubication,{table:this.filterList[0], value:this.filterList[1]}).then((response) => {
+						//console.log(response.data.data);
 						this.pages[index].class = "pageFocus";
 						this.llave = index;
 						this.onlyOnePage = page;
@@ -203,7 +219,9 @@
 				//this.clickpage(this.llave,this.onlyOnePage);
 			},
 			filters(){
-				console.log(this.filterList);
+				//console.log(this.filterList);
+				this.flag = 'filterPost';
+				this.fillList();
 			}
 		},
 		beforeMount: function(){//metodo uncial para llenar la lista y los paginados

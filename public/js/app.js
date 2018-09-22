@@ -1661,12 +1661,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	data: function data() {
 		return {
 			comentarios: [],
-			newComment: ''
+			newComment: '',
+			maxCount: 250,
+			numCaracteres: 250
 		};
 	},
 
@@ -1708,6 +1711,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			}
 			this.newComment = '';
 			this.getCommentList();
+		},
+		countdown: function countdown() {
+			this.numCaracteres = this.maxCount - this.newComment.length;
 		}
 	}
 });
@@ -1977,6 +1983,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	data: function data() {
@@ -2014,13 +2031,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			}
 		},
 		getFilteredList: function getFilteredList() {
-			var filtros = [this.valorCriterio, this.valueSearch];
-			this.$eventHub.$emit('filtersToSearch', filtros);
 			/*if(this.valueSearch != ''){
-   	axios.post('/pdvs/searchByFilter',{table:this.valorCriterio, value:this.valueSearch}).then((response) => {
-   		console.log(response.data.data);
+   	axios.post('/pdvs/searchByFilter?page=2',{table:this.valorCriterio, value:this.valueSearch}).then((response) => {
+   		console.log(response.data);
    	});
    }*/
+			var filtros = [this.valorCriterio, this.valueSearch];
+			this.$eventHub.$emit('filtersToSearch', filtros);
 		}
 	}
 });
@@ -2466,7 +2483,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			llave: '', //para recargar el sitio
 			onlyOnePage: [], //para regarcar el sitio
 			newComment: '', //para el comentario deafult o el que el usuario ponga
-			flag: '', //bandera que dice si es post o get
+			flag: 'GET', //bandera que dice si es post o get
 			valueSearch: '', //valor a buscar
 			filterList: []
 		};
@@ -2486,15 +2503,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		fillList: function fillList() {
 			var _this2 = this;
 
-			if (this.flag !== 'POST') {
+			if (this.flag == 'GET') {
 				axios.get('/pdvs/pages').then(function (response) {
 					_this2.list = response.data.data;
 					_this2.lastPage = response.data.last_page;
 					_this2.newComment = "The state was modified";
 					_this2.createPages();
 				});
-			} else {
+			} else if (this.flag == 'POST') {
 				axios.post('/pdvs/searchByStore', { search: this.valueSearch }).then(function (response) {
+					_this2.list = response.data.data;
+					_this2.lastPage = response.data.last_page;
+					_this2.newComment = 'The state was modified';
+					_this2.createPages();
+				});
+			} else {
+				axios.post('/pdvs/searchByFilter', { table: this.filterList[0], value: this.filterList[1] }).then(function (response) {
+					//console.log(response.data);
 					_this2.list = response.data.data;
 					_this2.lastPage = response.data.last_page;
 					_this2.newComment = 'The state was modified';
@@ -2517,15 +2542,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			if (index === '') {
 				index = 0;
 			}
-			if (this.flag !== 'POST') {
+			if (this.flag == 'GET') {
 				axios.get('pdvs/pages?page=' + page.ubication).then(function (response) {
 					_this3.pages[index].class = "pageFocus";
 					_this3.llave = index;
 					_this3.onlyOnePage = page;
 					_this3.list = response.data.data;
 				});
-			} else {
+			} else if (this.flag == 'POST') {
 				axios.post('/pdvs/searchByStore?page=' + page.ubication, { search: this.valueSearch }).then(function (response) {
+					_this3.pages[index].class = "pageFocus";
+					_this3.llave = index;
+					_this3.onlyOnePage = page;
+					_this3.list = response.data.data;
+				});
+			} else {
+				axios.post('/pdvs/searchByFilter?page=' + page.ubication, { table: this.filterList[0], value: this.filterList[1] }).then(function (response) {
+					//console.log(response.data.data);
 					_this3.pages[index].class = "pageFocus";
 					_this3.llave = index;
 					_this3.onlyOnePage = page;
@@ -2584,7 +2617,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			//this.clickpage(this.llave,this.onlyOnePage);
 		},
 		filters: function filters() {
-			console.log(this.filterList);
+			//console.log(this.filterList);
+			this.flag = 'filterPost';
+			this.fillList();
 		}
 	},
 	beforeMount: function beforeMount() {
@@ -38038,93 +38073,128 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "row" }, [
-    _c(
-      "select",
-      {
-        directives: [
-          {
-            name: "model",
-            rawName: "v-model",
-            value: _vm.valorCriterio,
-            expression: "valorCriterio"
-          }
-        ],
-        staticClass: "form-control",
-        on: {
-          change: [
-            function($event) {
-              var $$selectedVal = Array.prototype.filter
-                .call($event.target.options, function(o) {
-                  return o.selected
-                })
-                .map(function(o) {
-                  var val = "_value" in o ? o._value : o.value
-                  return val
-                })
-              _vm.valorCriterio = $event.target.multiple
-                ? $$selectedVal
-                : $$selectedVal[0]
+  return _c("div", { staticClass: "col-xs-12 col-sm-12 col-md-12 col-lg-12" }, [
+    _c("div", { staticClass: "row" }, [
+      _c(
+        "div",
+        { staticClass: "col-xs-5 col-sm-5 col-md-5 col-lg-5" },
+        [
+          _c("center", [
+            _c("h6", [
+              _c("span", { staticClass: "small" }, [_vm._v("Criterio")])
+            ])
+          ]),
+          _vm._v(" "),
+          _c(
+            "select",
+            {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.valorCriterio,
+                  expression: "valorCriterio"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: { id: "filterPosition" },
+              on: {
+                change: [
+                  function($event) {
+                    var $$selectedVal = Array.prototype.filter
+                      .call($event.target.options, function(o) {
+                        return o.selected
+                      })
+                      .map(function(o) {
+                        var val = "_value" in o ? o._value : o.value
+                        return val
+                      })
+                    _vm.valorCriterio = $event.target.multiple
+                      ? $$selectedVal
+                      : $$selectedVal[0]
+                  },
+                  _vm.operationOfSelected
+                ]
+              }
             },
-            _vm.operationOfSelected
-          ]
-        }
-      },
-      _vm._l(_vm.criterios, function(criterio) {
-        return _c("option", { domProps: { value: criterio.text } }, [
-          _vm._v("\r\n\t\t" + _vm._s(criterio.text) + "\r\n\t\t")
-        ])
-      })
-    ),
-    _vm._v(" "),
-    _c(
-      "select",
-      {
-        directives: [
-          {
-            name: "model",
-            rawName: "v-model",
-            value: _vm.valueSearch,
-            expression: "valueSearch"
-          }
+            _vm._l(_vm.criterios, function(criterio) {
+              return _c("option", { domProps: { value: criterio.text } }, [
+                _vm._v("\r\n\t\t\t\t" + _vm._s(criterio.text) + "\r\n\t\t\t\t")
+              ])
+            })
+          )
         ],
-        staticClass: "form-control",
-        on: {
-          change: function($event) {
-            var $$selectedVal = Array.prototype.filter
-              .call($event.target.options, function(o) {
-                return o.selected
-              })
-              .map(function(o) {
-                var val = "_value" in o ? o._value : o.value
-                return val
-              })
-            _vm.valueSearch = $event.target.multiple
-              ? $$selectedVal
-              : $$selectedVal[0]
-          }
-        }
-      },
-      _vm._l(_vm.optionsSearch, function(option) {
-        return _c("option", { domProps: { value: option.name } }, [
-          _vm._v("\r\n\t\t\t" + _vm._s(option.name) + "\r\n\t\t")
-        ])
-      })
-    ),
-    _vm._v(" "),
-    _c(
-      "button",
-      {
-        staticClass: "btn btn-primary",
-        attrs: { id: "btn-filter" },
-        on: {
-          click: function($event) {
-            _vm.getFilteredList()
-          }
-        }
-      },
-      [_c("i", { staticClass: "fa fa-filter" })]
-    )
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "col-xs-5 col-sm-5 col-md-5 col-lg-5" },
+        [
+          _c("center", [
+            _c("h6", [
+              _c("span", { staticClass: "small" }, [_vm._v("Filtrar")])
+            ])
+          ]),
+          _vm._v(" "),
+          _c(
+            "select",
+            {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.valueSearch,
+                  expression: "valueSearch"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: { id: "filterPosition" },
+              on: {
+                change: function($event) {
+                  var $$selectedVal = Array.prototype.filter
+                    .call($event.target.options, function(o) {
+                      return o.selected
+                    })
+                    .map(function(o) {
+                      var val = "_value" in o ? o._value : o.value
+                      return val
+                    })
+                  _vm.valueSearch = $event.target.multiple
+                    ? $$selectedVal
+                    : $$selectedVal[0]
+                }
+              }
+            },
+            _vm._l(_vm.optionsSearch, function(option) {
+              return _c("option", { domProps: { value: option.name } }, [
+                _vm._v("\r\n\t\t\t\t\t" + _vm._s(option.name) + "\r\n\t\t\t\t")
+              ])
+            })
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-xs-2 col-sm-2 col-md-2 col-lg-2" }, [
+        _c("span", [_vm._v(" ")]),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-primary",
+            attrs: { id: "btn-filter" },
+            on: {
+              click: function($event) {
+                _vm.getFilteredList()
+              }
+            }
+          },
+          [_c("center", [_c("i", { staticClass: "fa fa-filter" })])],
+          1
+        )
+      ])
+    ])
   ])
 }
 var staticRenderFns = []
@@ -38611,6 +38681,9 @@ var render = function() {
             attrs: { rows: "10" },
             domProps: { value: _vm.newComment },
             on: {
+              keyup: function($event) {
+                _vm.countdown()
+              },
               input: function($event) {
                 if ($event.target.composing) {
                   return
@@ -38619,6 +38692,18 @@ var render = function() {
               }
             }
           }),
+          _vm._v(" "),
+          _c("center", [
+            _c("h6", [
+              _c("span", { staticClass: "small" }, [
+                _vm._v(
+                  "Max 250 characters. Remaining: " +
+                    _vm._s(_vm.numCaracteres) +
+                    " "
+                )
+              ])
+            ])
+          ]),
           _c("br"),
           _vm._v(" "),
           _c(
@@ -38634,7 +38719,8 @@ var render = function() {
             },
             [_vm._v("ADD COMMENT")]
           )
-        ]
+        ],
+        1
       ),
       _vm._v(" "),
       _c("div", { staticClass: "col-xs-8 col-sm-8 col-md-8 col-lg-8" }, [
